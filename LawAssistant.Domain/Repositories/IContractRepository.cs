@@ -10,6 +10,6 @@ namespace LawAssistant.Domain.Repositories
 
 		public Task<CollectiveContract> UpdateContractAsync(CollectiveContract updatedContract);
 
-		public Task<int> RemoveContractAsync(int contractId);
+		public Task<int> RemoveContractAsync(CollectiveContract contract);
 	}
 }

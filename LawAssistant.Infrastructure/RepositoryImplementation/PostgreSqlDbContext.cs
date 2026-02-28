@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 using LawAssistant.Domain.Entities;
 
@@ -16,5 +16,28 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 
 		public DbSet<ComparisonReport>  ComparisonReport { get; set; }
 		public DbSet<ComparisonResult> ComparisonResult { get; set; }
+
+		public PostgreSqlDbContext(DbContextOptions<PostgreSqlDbContext> options) : base(options) { }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Lawyer>().HasKey(l => l.LawyerId);
+			modelBuilder.Entity<LawAct>().HasKey(la => la.ActId);
+			modelBuilder.Entity<ActArticle>().HasKey(a => a.ArticleId);
+			modelBuilder.Entity<CollectiveContract>().HasKey(c => c.ContractId);
+			modelBuilder.Entity<ContractParagraph>().HasKey(ph => ph.ParagraphId);
+			modelBuilder.Entity<ComparisonResult>().HasKey(cr => cr.ResultId);
+			modelBuilder.Entity<ComparisonReport>().HasKey(cre => cre.ReportId);
+
+			modelBuilder.Entity<CollectiveContract>()
+				.HasMany(c => c.ContractParagraphs)
+				.WithOne()
+				.HasForeignKey(c => c.ContractId);
+			
+			modelBuilder.Entity<LawAct>()
+				.HasMany(act => act.Articles)
+				.WithOne()
+				.HasForeignKey(a => a.ActId);
+		}
 	}
 }

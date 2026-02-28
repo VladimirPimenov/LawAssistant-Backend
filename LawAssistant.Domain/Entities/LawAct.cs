@@ -6,6 +6,8 @@
 
 		public string Title { get; set; }
 
-		public DateOnly AdoptedDate { get; set; }
+		public DateTime AdoptedDate { get; set; }
+
+		public List<ActArticle> Articles { get; set; }
 	}
 }
