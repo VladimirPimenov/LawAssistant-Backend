@@ -6,6 +6,8 @@ namespace LawAssistant.Domain.Repositories
 	{
 		public Task<CollectiveContract> GetCollectiveContractAsync(int contractId);
 
+		public Task<List<CollectiveContract>> GetLawyerContractsAsync(int lawyerId);
+
 		public Task<CollectiveContract> CreateCollectiveContractAsync(CollectiveContract contract);
 
 		public Task<CollectiveContract> UpdateContractAsync(CollectiveContract updatedContract);

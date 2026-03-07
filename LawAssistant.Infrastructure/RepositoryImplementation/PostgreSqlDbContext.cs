@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using LawAssistant.Domain.Entities;
+using LawAssistant.Infrastructure.RepositoryImplementation.Models;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation
 {
@@ -13,6 +14,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 
 		public DbSet<CollectiveContract> CollectiveContract { get; set; }
 		public DbSet<ContractParagraph> ContractParagraph { get; set; }
+		public DbSet<LawyerContract> LawyerContract { get; set; }
 
 		public DbSet<ComparisonReport>  ComparisonReport { get; set; }
 		public DbSet<ComparisonResult> ComparisonResult { get; set; }

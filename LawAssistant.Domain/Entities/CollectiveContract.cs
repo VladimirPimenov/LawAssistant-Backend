@@ -4,8 +4,6 @@
 	{
 		public int ContractId { get; set; }
 
-		public int LawyerId { get; set; }
-
 		public DateTime CreatedDate { get; set; }
 
 		public List<ContractParagraph> ContractParagraphs { get; set; }

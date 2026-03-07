@@ -8,19 +8,32 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 		PostgreSqlDbContext dbContext)
 		: IContractRepository
 	{
+		public async Task<CollectiveContract> GetCollectiveContractAsync(int contractId)
+		{
+			return await dbContext.CollectiveContract
+				.Include(c => c.ContractParagraphs)
+				.FirstOrDefaultAsync(c => c.ContractId == contractId);
+		}
+
+		public async Task<List<CollectiveContract>> GetLawyerContractsAsync(int lawyerId)
+		{
+			var lawyerContractIds = await dbContext.LawyerContract
+				.Where(lc => lc.LawyerId == lawyerId)
+				.Select(lc => lc.ContractId)
+				.ToListAsync();
+
+			return await dbContext.CollectiveContract
+				.Include(c => c.ContractParagraphs)
+				.Where(c => lawyerContractIds.Contains(c.ContractId))
+				.ToListAsync();
+		}
+
 		public async Task<CollectiveContract> CreateCollectiveContractAsync(CollectiveContract contract)
 		{
 			dbContext.CollectiveContract.Add(contract);
 			await dbContext.SaveChangesAsync();
 
 			return contract;
-		}
-
-		public async Task<CollectiveContract> GetCollectiveContractAsync(int contractId)
-		{
-			return await dbContext.CollectiveContract
-				.Include(c => c.ContractParagraphs)
-				.FirstOrDefaultAsync(c => c.ContractId == contractId);
 		}
 
 		public async Task<int> RemoveContractAsync(CollectiveContract contract)
