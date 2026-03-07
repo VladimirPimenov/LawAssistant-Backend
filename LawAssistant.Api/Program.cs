@@ -1,7 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+
+using LawAssistant.Application.Contracts;
+
 using LawAssistant.Domain.Repositories;
+
+using LawAssistant.Infrastructure.FileStorage;
 using LawAssistant.Infrastructure.RepositoryImplementation;
 using LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +20,8 @@ builder.Services.AddDbContext<PostgreSqlDbContext>(options =>
 builder.Services.AddScoped<ILawyerRepository, LawyerRepository>();
 builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<ILawDocumentsRepository, LawDocumentsRepository>();
+
+builder.Services.AddScoped<IFileService, LocalFileService>();
 
 var app = builder.Build();
 
