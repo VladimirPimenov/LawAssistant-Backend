@@ -40,6 +40,10 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 				.HasMany(act => act.Articles)
 				.WithOne()
 				.HasForeignKey(a => a.ActId);
+
+			modelBuilder.Entity<Lawyer>()
+				.Property(l => l.HashedPassword)
+				.HasColumnName("Password");
 		}
 	}
 }

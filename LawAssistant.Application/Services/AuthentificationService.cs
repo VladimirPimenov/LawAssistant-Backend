@@ -1,0 +1,55 @@
+﻿using LawAssistant.Application.Contracts;
+using LawAssistant.Application.Models;
+using LawAssistant.Domain.Entities;
+using LawAssistant.Domain.Repositories;
+
+namespace LawAssistant.Application.Services
+{
+    public class AuthentificationService(
+        IHashService hashService,
+        ITokenProvider tokenProvider,
+        ILawyerRepository lawyerRepository) 
+        : IAuthentificationService
+    {
+        public async Task<LawyerDto> RegisterAsync(RegisterRequest registerRequest)
+        {
+            string hashedPassword = hashService.Hash(registerRequest.Password);
+
+            var newUser = new Lawyer
+            {
+                FirstName = registerRequest.FirstName,
+                LastName = registerRequest.LastName,
+                Email = registerRequest.Email,
+                HashedPassword = hashedPassword
+            };
+
+            var registeredUser = await lawyerRepository.CreateLawyerAsync(newUser);
+
+            if (registeredUser == null)
+                return null;
+
+            return new LawyerDto
+            {
+                FirstName = registeredUser.FirstName,
+                LastName = registeredUser.LastName,
+                Email = registeredUser.Email
+            };
+        }
+
+        public async Task<string> LoginAsync(LoginRequest loginRequest)
+        {
+            var user = await lawyerRepository.GetLawyerByEmailAsync(loginRequest.Email);
+
+            if (user == null)
+                return null;
+
+            if (!hashService.Verify(loginRequest.Password, user.HashedPassword))
+                return null;
+
+            var token = tokenProvider.GenerateToken(user);
+
+            return token;
+        }
+
+    }
+}

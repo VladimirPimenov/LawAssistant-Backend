@@ -6,6 +6,9 @@ namespace LawAssistant.Domain.Repositories
 	{
 		public Task<Lawyer> GetLawyerAsync(int lawyerId);
 
+		public Task<Lawyer> GetLawyerByEmailAsync(string email);
+
 		public Task<Lawyer> CreateLawyerAsync(Lawyer lawyer);
+
 	}
 }

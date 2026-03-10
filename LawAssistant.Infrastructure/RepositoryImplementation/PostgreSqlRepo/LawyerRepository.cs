@@ -1,5 +1,6 @@
 ﻿using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {
@@ -10,14 +11,21 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 		public async Task<Lawyer> CreateLawyerAsync(Lawyer lawyer)
 		{
 			dbContext.Lawyer.Add(lawyer);
-			dbContext.SaveChangesAsync();
+			await dbContext.SaveChangesAsync();
 
 			return lawyer;
+		}
+
+		public async Task<Lawyer> GetLawyerByEmailAsync(string email)
+		{
+			return await dbContext.Lawyer.FirstOrDefaultAsync(l => l.Email == email);
 		}
 
 		public async Task<Lawyer> GetLawyerAsync(int lawyerId)
 		{
 			return await dbContext.Lawyer.FindAsync(lawyerId);
 		}
+
+		
 	}
 }
