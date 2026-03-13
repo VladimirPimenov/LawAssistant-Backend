@@ -2,18 +2,24 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 using LawAssistant.Application.Contracts;
+using LawAssistant.Api.Settings;
 
 namespace LawAssistant.Infrastructure.FileStorage
 {
-    public class LocalFileService(
-        IConfiguration config)
-        : IFileService
+    public class LocalFileService : IFileService
     {
-        private readonly string _storagePath = config["FileServerConfiguration:Path"];
+        private readonly FileServerConfiguration fileServerConfig;
+
+        public LocalFileService(IConfiguration config)
+        {
+			fileServerConfig = config
+				.GetSection(nameof(FileServerConfiguration))
+				.Get<FileServerConfiguration>();
+		}
 
         public async Task LoadFileToServer(IFormFile file)
         {
-            string filePath = _storagePath + file.FileName;
+            string filePath = fileServerConfig.Path + file.FileName;
 
             await using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
@@ -23,7 +29,7 @@ namespace LawAssistant.Infrastructure.FileStorage
 
         public async Task<IFormFile> LoadFileFromServer(string fileName)
         {
-            string filePath = _storagePath + fileName;
+            string filePath = fileServerConfig.Path + fileName;
 
             var memoryStream = new MemoryStream();
 

@@ -1,15 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 
+using Microsoft.OpenApi;
+
 using LawAssistant.Domain.Repositories;
 using LawAssistant.Application.Contracts;
 using LawAssistant.Application.Services;
 
-using Microsoft.OpenApi;
-
 using LawAssistant.Infrastructure.FileStorage;
 using LawAssistant.Infrastructure.RepositoryImplementation;
 using LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo;
+
 using LawAssistant.Api.Extensions;
+using LawAssistant.Api.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +29,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddDbContext<PostgreSqlDbContext>(options =>
-	options.UseNpgsql(builder.Configuration["DbConfiguration:PostreSqlConnectionString"]));
+	options.UseNpgsql(
+		builder.Configuration
+		.GetSection(nameof(DbConfiguration))
+		.Get<DbConfiguration>().PostreSqlConnectionString));
 
 builder.Services.AddScoped<ILawyerRepository, LawyerRepository>();
 builder.Services.AddScoped<IContractRepository, ContractRepository>();

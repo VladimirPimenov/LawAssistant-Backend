@@ -7,13 +7,19 @@ using System.IdentityModel.Tokens.Jwt;
 
 using LawAssistant.Application.Contracts;
 using LawAssistant.Domain.Entities;
+using LawAssistant.Application.Settings;
 
 namespace LawAssistant.Application.Services
 {
-    public class JwtTokenProvider(
-        IConfiguration config)
-        : ITokenProvider
+    public class JwtTokenProvider : ITokenProvider
     {
+        private readonly JwtConfiguration jwtConfiguration;
+
+        public JwtTokenProvider(IConfiguration config)
+        {
+            jwtConfiguration = config.GetSection(nameof(JwtConfiguration)).Get<JwtConfiguration>();
+        }
+
         public string GenerateToken(Lawyer lawyer)
         {
             var claims = new List<Claim>
@@ -21,7 +27,7 @@ namespace LawAssistant.Application.Services
                 new Claim("userId", lawyer.LawyerId.ToString())
             };
 
-            var key = config.GetValue<string>("JwtConfiguration:Secretkey");
+            var key = jwtConfiguration.SecretKey;
 
             var credentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
@@ -30,7 +36,7 @@ namespace LawAssistant.Application.Services
             var token = new JwtSecurityToken(
                 claims: claims,
                 signingCredentials: credentials,
-                expires: DateTime.Now.AddHours(2));
+                expires: DateTime.Now.AddMinutes(jwtConfiguration.ExpirationTimeInMinutes));
 
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 
