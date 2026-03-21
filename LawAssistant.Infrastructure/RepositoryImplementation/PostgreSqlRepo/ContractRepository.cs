@@ -1,6 +1,7 @@
-﻿using LawAssistant.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {

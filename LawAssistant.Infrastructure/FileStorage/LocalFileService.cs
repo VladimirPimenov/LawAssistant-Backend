@@ -12,12 +12,12 @@ namespace LawAssistant.Infrastructure.FileStorage
 
         public LocalFileService(IConfiguration config)
         {
-			fileServerConfig = config
-				.GetSection(nameof(FileServerConfiguration))
-				.Get<FileServerConfiguration>();
-		}
+            fileServerConfig = config
+                .GetSection(nameof(FileServerConfiguration))
+                .Get<FileServerConfiguration>();
+        }
 
-        public async Task LoadFileToServer(IFormFile file)
+        public async Task<string> LoadFileToServer(IFormFile file)
         {
             string filePath = fileServerConfig.Path + file.FileName;
 
@@ -25,6 +25,8 @@ namespace LawAssistant.Infrastructure.FileStorage
             {
                 await file.CopyToAsync(fileStream);
             }
+
+            return filePath;
         }
 
         public async Task<IFormFile> LoadFileFromServer(string fileName)

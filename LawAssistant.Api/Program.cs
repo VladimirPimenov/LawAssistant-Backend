@@ -44,6 +44,10 @@ builder.Services.AddScoped<IHashService, SHA256HashService>();
 builder.Services.AddScoped<ITokenProvider, JwtTokenProvider>();
 builder.Services.AddScoped<IAuthentificationService, AuthentificationService>();
 
+builder.Services.AddScoped<IContractService, ContractService>();
+
+builder.Services.AddScoped<IDocumentParser, WordDocumentParser>();
+
 builder.Services.AddJwtAuthentification(builder.Configuration);
 
 var app = builder.Build();

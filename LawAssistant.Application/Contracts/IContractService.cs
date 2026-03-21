@@ -1,4 +1,6 @@
-﻿using LawAssistant.Domain.Entities;
+﻿using Microsoft.AspNetCore.Http;
+
+using LawAssistant.Domain.Entities;
 
 namespace LawAssistant.Application.Contracts
 {
@@ -8,7 +10,7 @@ namespace LawAssistant.Application.Contracts
 
 		public Task<CollectiveContract> GetContract(int contractId);
 
-		public Task<CollectiveContract> CreateContractAsync(CollectiveContract contract);
+		public Task<CollectiveContract> CreateContractAsync(IFormFile contractDocument);
 
 		public Task<CollectiveContract> UpdateContractAsync(CollectiveContract updatedContract);
 
