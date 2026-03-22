@@ -3,6 +3,7 @@
 using LawAssistant.Application.Contracts;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
+using LawAssistant.Application.Models;
 
 namespace LawAssistant.Application.Services
 {
@@ -22,10 +23,11 @@ namespace LawAssistant.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<CollectiveContract> CreateContractAsync(IFormFile contractDocument)
+        public async Task<CollectiveContract> CreateContractAsync(ContractDto contractDto)
         {
             var contract = new CollectiveContract
             {
+                Title = contractDto.Title,
                 CreatedDate = DateTime.Now.ToUniversalTime(),
                 ContractParagraphs = new List<ContractParagraph>()
             };
@@ -34,7 +36,7 @@ namespace LawAssistant.Application.Services
             if (createdContract == null)
                 return null;
 
-            string documentPath = await fileService.LoadFileToServer(contractDocument);
+            string documentPath = await fileService.LoadFileToServer(contractDto.ContractFile);
             if (documentPath == null)
                 return null;
 
