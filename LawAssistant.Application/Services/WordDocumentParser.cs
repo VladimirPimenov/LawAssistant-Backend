@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 using LawAssistant.Application.Contracts;
 
@@ -8,19 +9,18 @@ namespace LawAssistant.Application.Services
     {
         public List<string> ParseDocumentIntoParagraphs(string filePath)
         {
-            var wordApp = new Microsoft.Office.Interop.Word.Application();
-            var wordDocument = wordApp.Documents.Open(filePath);
-            var wordParagraphs = wordDocument.Paragraphs;
-
             var paragraphs = new List<string>();
 
-            foreach(Microsoft.Office.Interop.Word.Paragraph paragraph in wordParagraphs)
+            using (var document = WordprocessingDocument.Open(filePath, false)) 
             {
-                paragraphs.Add(paragraph.Range.Text);
-            }
+                var documentBody = document.MainDocumentPart.Document.Body;
 
-            wordDocument.Close();
-            wordApp.Quit();
+                foreach (var paragraph in documentBody.Elements<Paragraph>())
+                {
+                    string text = paragraph.InnerText;
+                    paragraphs.Add(text);
+                }
+            };
 
             return paragraphs;
         }
