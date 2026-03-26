@@ -36,12 +36,9 @@ namespace LawAssistant.Application.Services
             if (createdContract == null)
                 return null;
 
-            string documentPath = await fileService.LoadFileToServer(contractDto.ContractFile);
-            if (documentPath == null)
-                return null;
+            string documentKey = await fileService.LoadFileToServer(contractDto.ContractFile);
 
-
-            var paragraphs = documentParser.ParseDocumentIntoParagraphs(documentPath);
+            var paragraphs = documentParser.ParseDocumentIntoParagraphs(contractDto.ContractFile);
 
             foreach (var paragraphText in paragraphs)
             {

@@ -26,12 +26,12 @@ namespace LawAssistant.Infrastructure.FileStorage
                 await file.CopyToAsync(fileStream);
             }
 
-            return filePath;
+            return file.FileName;
         }
 
-        public async Task<IFormFile> LoadFileFromServer(string fileName)
+        public async Task<IFormFile> LoadFileFromServer(string fileKey)
         {
-            string filePath = fileServerConfig.Path + fileName;
+            string filePath = fileServerConfig.Path + fileKey;
 
             var memoryStream = new MemoryStream();
 
@@ -42,7 +42,7 @@ namespace LawAssistant.Infrastructure.FileStorage
 
             memoryStream.Position = 0;
 
-            IFormFile file = new FormFile(memoryStream, fileName, fileName, "contract");
+            IFormFile file = new FormFile(memoryStream, fileKey, fileKey, "contract");
 
             return file;
         }

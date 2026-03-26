@@ -4,6 +4,6 @@ namespace LawAssistant.Application.Contracts
 {
     public interface IDocumentParser
     {
-        public List<string> ParseDocumentIntoParagraphs(string filePath);
+        public List<string> ParseDocumentIntoParagraphs(IFormFile documentFile);
     }
 }
