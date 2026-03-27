@@ -13,21 +13,31 @@ namespace LawAssistant.Application.Services
         IDocumentParser documentParser)
         : IContractService
     {
-        public Task<CollectiveContract> GetContract(int contractId)
+        public async Task<CollectiveContract> GetContractAsync(int contractId)
         {
-            throw new NotImplementedException();
+            return await contractRepository.GetCollectiveContractAsync(contractId);
         }
 
-        public Task<List<CollectiveContract>> GetLawyerContractsAsync(int lawyerId)
+        public async Task<List<ContractDto>> GetLawyerContractsInfoAsync(int lawyerId)
         {
-            throw new NotImplementedException();
+            var contracts = await contractRepository.GetLawyerContractsAsync(lawyerId);
+
+            var contractsInfo = contracts
+                .Select(c => new ContractDto
+                {
+                    ContractId = c.ContractId,
+                    Title = c.Title,
+                    CreatedDate = c.CreatedDate
+                }).ToList();
+
+            return contractsInfo;
         }
 
-        public async Task<CollectiveContract> CreateContractAsync(ContractDto contractDto)
+        public async Task<CollectiveContract> CreateContractAsync(CreateContractRequest contractRequest)
         {
             var contract = new CollectiveContract
             {
-                Title = contractDto.Title,
+                Title = contractRequest.Title,
                 CreatedDate = DateTime.Now.ToUniversalTime(),
                 ContractParagraphs = new List<ContractParagraph>()
             };
@@ -36,9 +46,9 @@ namespace LawAssistant.Application.Services
             if (createdContract == null)
                 return null;
 
-            string documentKey = await fileService.LoadFileToServer(contractDto.ContractFile);
+            string documentKey = await fileService.LoadFileToServer(contractRequest.ContractFile);
 
-            var paragraphs = documentParser.ParseDocumentIntoParagraphs(contractDto.ContractFile);
+            var paragraphs = documentParser.ParseDocumentIntoParagraphs(contractRequest.ContractFile);
 
             foreach (var paragraphText in paragraphs)
             {

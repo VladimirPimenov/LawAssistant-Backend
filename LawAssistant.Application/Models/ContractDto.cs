@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
-namespace LawAssistant.Application.Models
+﻿namespace LawAssistant.Application.Models
 {
     public record ContractDto
     {
-        public string Title { get; init; }
+		public int ContractId { get; set; }
 
-        public IFormFile ContractFile { get; init; }
-    }
+		public string Title { get; set; }
+
+		public DateTime CreatedDate { get; set; }
+	}
 }

@@ -24,7 +24,6 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 				.ToListAsync();
 
 			return await dbContext.CollectiveContract
-				.Include(c => c.ContractParagraphs)
 				.Where(c => lawyerContractIds.Contains(c.ContractId))
 				.ToListAsync();
 		}
