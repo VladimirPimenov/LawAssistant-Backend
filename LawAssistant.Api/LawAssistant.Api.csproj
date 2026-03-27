@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LawAssistant.Application\LawAssistant.Application.csproj" />
+    <ProjectReference Include="..\LawAssistant.Domain\LawAssistant.Domain.csproj" />
+    <ProjectReference Include="..\LawAssistant.Infrastructure\LawAssistant.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
