@@ -64,15 +64,27 @@ namespace LawAssistant.Application.Services
             return createdContract;
         }
 
+		public async Task<CollectiveContract> UpdateContractAsync(ContractDto contractDto)
+		{
+            var contract = await contractRepository.GetCollectiveContractAsync(contractDto.ContractId);
 
-        public Task<int> RemoveContractAsync(int contractId)
-        {
-            throw new NotImplementedException();
-        }
+            if(contract == null)
+                return null;
 
-        public Task<CollectiveContract> UpdateContractAsync(CollectiveContract updatedContract)
+			var updatedContract = await contractRepository.UpdateContractAsync(contract);
+
+            return updatedContract;
+		}
+
+		public async Task<int?> RemoveContractAsync(int contractId)
         {
-            throw new NotImplementedException();
+            var contract = await contractRepository.GetCollectiveContractAsync(contractId);
+
+            if (contract == null)
+                return null;
+
+            int? removedContractId = await contractRepository.RemoveContractAsync(contract);
+            return removedContractId;
         }
     }
 }

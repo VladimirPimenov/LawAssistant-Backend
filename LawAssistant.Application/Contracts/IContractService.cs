@@ -13,8 +13,8 @@ namespace LawAssistant.Application.Contracts
 
 		public Task<CollectiveContract> CreateContractAsync(CreateContractRequest contractRequest);
 
-		public Task<CollectiveContract> UpdateContractAsync(CollectiveContract updatedContract);
+		public Task<CollectiveContract> UpdateContractAsync(ContractDto contractDto);
 
-		public Task<int> RemoveContractAsync(int contractId);
+		public Task<int?> RemoveContractAsync(int contractId);
 	}
 }
