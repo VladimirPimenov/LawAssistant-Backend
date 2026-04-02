@@ -2,6 +2,7 @@
 
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
+using LawAssistant.Infrastructure.RepositoryImplementation.Models;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {
@@ -18,13 +19,13 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 
 		public async Task<List<CollectiveContract>> GetLawyerContractsAsync(int lawyerId)
 		{
-			var lawyerContractIds = await dbContext.LawyerContract
+			var contractIds = await dbContext.LawyerContract
 				.Where(lc => lc.LawyerId == lawyerId)
 				.Select(lc => lc.ContractId)
 				.ToListAsync();
 
 			return await dbContext.CollectiveContract
-				.Where(c => lawyerContractIds.Contains(c.ContractId))
+				.Where(c => contractIds.Contains(c.ContractId))
 				.ToListAsync();
 		}
 
@@ -50,6 +51,41 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 			await dbContext.SaveChangesAsync();
 
 			return updatedContract;
+		}
+
+		public async Task AddAuthorToContractAsync(int lawyerId, int contractId)
+		{
+			var lawyerContract = new LawyerContract
+			{
+				LawyerId = lawyerId,
+				ContractId = contractId
+			};
+
+			dbContext.LawyerContract.Add(lawyerContract);
+			await dbContext.SaveChangesAsync();
+		}
+
+		public async Task RemoveAuthorFromContractAsync(int lawyerId, int contractId)
+		{
+			var lawyerContract = await dbContext.LawyerContract
+									.FirstOrDefaultAsync(lc => 
+										lc.LawyerId == lawyerId 
+										&& lc.ContractId == contractId);
+
+			dbContext.LawyerContract.Remove(lawyerContract);
+			await dbContext.SaveChangesAsync();
+		}
+
+		public async Task<List<Lawyer>> GetContractAuthorsAsync(CollectiveContract contract)
+		{
+			var lawyerIds = await dbContext.LawyerContract
+				.Where(lc => lc.ContractId == contract.ContractId)
+				.Select(lc => lc.LawyerId)
+				.ToListAsync();
+
+			return await dbContext.Lawyer
+				.Where(l => lawyerIds.Contains(l.LawyerId))
+				.ToListAsync();
 		}
 	}
 }

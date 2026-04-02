@@ -6,6 +6,8 @@ namespace LawAssistant.Application.Models
     {
         public string Title { get; init; }
 
+        public int[] AuthorsId { get; init;  }
+
         public IFormFile ContractFile { get; init; }
     }
 }
