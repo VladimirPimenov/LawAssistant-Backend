@@ -1,13 +1,11 @@
 ﻿namespace LawAssistant.Domain.Entities
 {
-	public class ComparisonReport
-	{
-		public int ReportId { get; set; }
+    public class ComparisonReport
+    {
+        public int ReportId { get; set; }
 
-		public int ResultId { get; set; }
+        public DateTime ReportedDate { get; set; }
 
-		public int LawyerId { get; set; }
-
-		public DateTime ReportedDate { get; set; }
-	}
+        public List<ComparisonResult> ComparisonResults { get; set; }
+    }
 }
