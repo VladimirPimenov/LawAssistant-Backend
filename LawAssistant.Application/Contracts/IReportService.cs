@@ -4,7 +4,7 @@ namespace LawAssistant.Application.Contracts
 {
 	public interface IReportService
 	{
-		public Task<ComparisonReport> GetReportForContractAsync(int contractId);
+		public Task<ComparisonReport> GetReportAsync(int reportId);
 
 		public Task<ComparisonReport> CreateComparisonReportAsync(int contractId);
 

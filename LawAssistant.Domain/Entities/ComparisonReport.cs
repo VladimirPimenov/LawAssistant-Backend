@@ -1,4 +1,6 @@
-﻿namespace LawAssistant.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LawAssistant.Domain.Entities
 {
     public class ComparisonReport
     {

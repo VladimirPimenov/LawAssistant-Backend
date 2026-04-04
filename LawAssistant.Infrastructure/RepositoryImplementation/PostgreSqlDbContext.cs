@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using LawAssistant.Domain.Entities;
 using LawAssistant.Infrastructure.RepositoryImplementation.Models;
+using LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation
 {
@@ -18,6 +19,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 
 		public DbSet<ComparisonReport>  ComparisonReport { get; set; }
 		public DbSet<ComparisonResult> ComparisonResult { get; set; }
+		public DbSet<ReportResult> ReportResult { get; set; }
 
 		public PostgreSqlDbContext(DbContextOptions<PostgreSqlDbContext> options) : base(options) { }
 
@@ -30,6 +32,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 			modelBuilder.Entity<ContractParagraph>().HasKey(ph => ph.ParagraphId);
 			modelBuilder.Entity<ComparisonResult>().HasKey(cr => cr.ResultId);
 			modelBuilder.Entity<ComparisonReport>().HasKey(cre => cre.ReportId);
+			modelBuilder.Entity<ReportResult>().HasKey(rr => rr.ReportResultId);
 
 			modelBuilder.Entity<CollectiveContract>()
 				.HasMany(c => c.ContractParagraphs)
@@ -44,6 +47,9 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 			modelBuilder.Entity<Lawyer>()
 				.Property(l => l.HashedPassword)
 				.HasColumnName("Password");
+
+			modelBuilder.Entity<ComparisonReport>()
+				.Ignore(r => r.ComparisonResults);
 		}
 	}
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-using LawAssistant.Domain.Entities;
+﻿using LawAssistant.Domain.Entities;
 using LawAssistant.Application.Models;
 
 namespace LawAssistant.Application.Contracts

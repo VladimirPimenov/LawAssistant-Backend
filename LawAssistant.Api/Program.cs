@@ -37,6 +37,8 @@ builder.Services.AddDbContext<PostgreSqlDbContext>(options =>
 builder.Services.AddScoped<ILawyerRepository, LawyerRepository>();
 builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<ILawDocumentsRepository, LawDocumentsRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
 
 builder.Services.AddScoped<IFileService, LocalFileService>();
 
@@ -45,6 +47,7 @@ builder.Services.AddScoped<ITokenProvider, JwtTokenProvider>();
 builder.Services.AddScoped<IAuthentificationService, AuthentificationService>();
 
 builder.Services.AddScoped<IContractService, ContractService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddScoped<IDocumentParser, WordDocumentParser>();
 
