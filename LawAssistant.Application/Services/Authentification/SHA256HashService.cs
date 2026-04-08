@@ -1,9 +1,8 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-
 using LawAssistant.Application.Contracts;
 
-namespace LawAssistant.Application.Services
+namespace LawAssistant.Application.Services.Authentification
 {
     public class SHA256HashService : IHashService
     {

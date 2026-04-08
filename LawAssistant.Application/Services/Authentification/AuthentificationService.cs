@@ -1,9 +1,10 @@
 ﻿using LawAssistant.Application.Contracts;
 using LawAssistant.Application.Models;
+using LawAssistant.Application.Models.Authentification;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
 
-namespace LawAssistant.Application.Services
+namespace LawAssistant.Application.Services.Authentification
 {
     public class AuthentificationService(
         IHashService hashService,
@@ -11,7 +12,7 @@ namespace LawAssistant.Application.Services
         ILawyerRepository lawyerRepository) 
         : IAuthentificationService
     {
-        public async Task<LawyerDto> RegisterAsync(RegisterRequest registerRequest)
+        public async Task<RegisterResponce> RegisterAsync(RegisterRequest registerRequest)
         {
             string hashedPassword = hashService.Hash(registerRequest.Password);
 
@@ -28,8 +29,9 @@ namespace LawAssistant.Application.Services
             if (registeredUser == null)
                 return null;
 
-            return new LawyerDto
+            return new RegisterResponce
             {
+                Id = registeredUser.LawyerId,
                 FirstName = registeredUser.FirstName,
                 LastName = registeredUser.LastName,
                 Email = registeredUser.Email

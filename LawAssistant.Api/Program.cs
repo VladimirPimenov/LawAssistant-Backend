@@ -12,6 +12,7 @@ using LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo;
 
 using LawAssistant.Api.Extensions;
 using LawAssistant.Api.Settings;
+using LawAssistant.Application.Services.Authentification;
 
 var builder = WebApplication.CreateBuilder(args);
 

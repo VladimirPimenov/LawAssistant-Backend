@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 using LawAssistant.Application.Contracts;
-using LawAssistant.Application.Models;
+using LawAssistant.Application.Models.Authentification;
 
 namespace LawAssistant.Api.Controllers
 {
