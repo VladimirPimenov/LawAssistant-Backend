@@ -47,7 +47,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 
 		public async Task<CollectiveContract> UpdateContractAsync(CollectiveContract updatedContract)
 		{
-			dbContext.CollectiveContract.Attach(updatedContract);
+			dbContext.CollectiveContract.Update(updatedContract);
 			await dbContext.SaveChangesAsync();
 
 			return updatedContract;

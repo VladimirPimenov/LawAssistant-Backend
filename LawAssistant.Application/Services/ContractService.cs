@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-
-using LawAssistant.Application.Contracts;
+﻿using LawAssistant.Application.Contracts;
+using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
-using LawAssistant.Application.Models;
+using System.Diagnostics.Contracts;
 
 namespace LawAssistant.Application.Services
 {
@@ -30,6 +29,7 @@ namespace LawAssistant.Application.Services
                 var authorsDto = authors.
                     Select(a => new LawyerDto
                     {
+                        LawyerId = a.LawyerId,
                         FirstName = a.FirstName,
                         LastName = a.LastName,
                         Email = a.Email
@@ -49,7 +49,7 @@ namespace LawAssistant.Application.Services
 
         public async Task<CollectiveContract> CreateContractAsync(CreateContractRequest contractRequest)
         {
-            var contractAuthors = await GetContractAuthorsAsync(contractRequest);
+            var contractAuthors = await GetContractAuthorsFromRequestAsync(contractRequest);
 
             if (contractAuthors == null)
                 return null;
@@ -88,14 +88,24 @@ namespace LawAssistant.Application.Services
 
 		public async Task<CollectiveContract> UpdateContractAsync(ContractDto contractDto)
 		{
-            var contract = await contractRepository.GetCollectiveContractAsync(contractDto.ContractId);
+            var dbContract = await contractRepository.GetCollectiveContractAsync(contractDto.ContractId);
 
-            if(contract == null)
+            if(dbContract == null)
                 return null;
 
-			var updatedContract = await contractRepository.UpdateContractAsync(contract);
+            dbContract.Title = contractDto.Title;
+            dbContract.CreatedDate = dbContract.CreatedDate.ToUniversalTime();
 
-            return updatedContract;
+			var updatedContract = await contractRepository.UpdateContractAsync(dbContract);
+
+			var dbContractAuthors = await contractRepository.GetContractAuthorsAsync(dbContract);
+			var addedAuthors = await GetAddedAuthorsAsync(contractDto, dbContractAuthors);
+			var removedAuthors = await GetRemovedAuthorsAsync(contractDto, dbContractAuthors);
+
+            await AddAuthorsToContractAsync(addedAuthors, updatedContract);
+            await RemoveAuthorsFromContractAsync(removedAuthors, updatedContract);
+
+			return updatedContract;
 		}
 
 		public async Task<int?> RemoveContractAsync(int contractId)
@@ -111,7 +121,7 @@ namespace LawAssistant.Application.Services
             return removedContractId;
         }
 
-        private async Task<List<Lawyer>> GetContractAuthorsAsync(CreateContractRequest contractRequest)
+        private async Task<List<Lawyer>> GetContractAuthorsFromRequestAsync(CreateContractRequest contractRequest)
         {
             var authorsFindTasks = contractRequest.AuthorsId.Select(lawyerRepository.GetLawyerAsync);
             var authors = await Task.WhenAll(authorsFindTasks);
@@ -121,24 +131,56 @@ namespace LawAssistant.Application.Services
 
         private async Task AddAuthorsToContractAsync(List<Lawyer> authors, CollectiveContract contract)
         {
-            var tasks = new List<Task>();
-
             foreach (var author in authors)
             {
-                tasks.Add(contractRepository.AddAuthorToContractAsync(author.LawyerId, contract.ContractId));
+                await contractRepository.AddAuthorToContractAsync(author.LawyerId, contract.ContractId);
             }
-            await Task.WhenAll(tasks);
+            await Task.CompletedTask;
         }
 
 		private async Task RemoveAuthorsFromContractAsync(List<Lawyer> authors, CollectiveContract contract)
 		{
-			var tasks = new List<Task>();
-
 			foreach (var author in authors)
 			{
-				tasks.Add(contractRepository.RemoveAuthorFromContractAsync(author.LawyerId, contract.ContractId));
+				await contractRepository.RemoveAuthorFromContractAsync(author.LawyerId, contract.ContractId);
 			}
-			await Task.WhenAll(tasks);
+            await Task.CompletedTask;
+		}
+
+        private async Task<List<Lawyer>> GetAddedAuthorsAsync(ContractDto updatedContract, List<Lawyer> dbAuthors)
+        {
+            var dbContractAuthorsId = dbAuthors.Select(a => a.LawyerId).ToList();
+
+            var updatedContactAuthorsId = updatedContract.Authors.Select(a => a.LawyerId).ToList();
+
+            var addedAuthorsId = updatedContactAuthorsId.Except(dbContractAuthorsId);
+
+            var addedAuthors = new List<Lawyer>();
+
+            foreach(var authorId in addedAuthorsId)
+            {
+                var author = await lawyerRepository.GetLawyerAsync(authorId);
+                addedAuthors.Add(author);
+            }
+            return addedAuthors;
+        }
+
+		private async Task<List<Lawyer>> GetRemovedAuthorsAsync(ContractDto updatedContract, List<Lawyer> dbAuthors)
+		{
+			var dbContractAuthorsId = dbAuthors.Select(a => a.LawyerId).ToList();
+
+			var updatedContactAuthorsId = updatedContract.Authors.Select(a => a.LawyerId).ToList();
+
+			var removedAuthorsId = dbContractAuthorsId.Except(updatedContactAuthorsId);
+
+			var removedAuthors = new List<Lawyer>();
+
+			foreach (var authorId in removedAuthorsId)
+			{
+				var author = await lawyerRepository.GetLawyerAsync(authorId);
+				removedAuthors.Add(author);
+			}
+			return removedAuthors;
 		}
 	}
 }
