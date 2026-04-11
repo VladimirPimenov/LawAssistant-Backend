@@ -3,16 +3,30 @@ using Microsoft.AspNetCore.Authorization;
 
 using LawAssistant.Application.Models;
 using LawAssistant.Application.Contracts;
+using LawAssistant.Domain.Entities;
 
 namespace LawAssistant.Api.Controllers
 {
+    /// <summary>
+    /// Контроллер для работы с коллективными договорами
+    /// </summary>
     [ApiController, Route("contract")]
     public class ContractController(
         IContractService contractService)
         : ControllerBase
     {
+        /// <summary>
+        /// Получает договор по идентификатору.
+        /// </summary>
+        /// <param name="contractId">Идентификатор договора</param>
+        /// <returns>
+        /// 200 (Ок) с найденным договором.
+        /// 404 (NotFound) если договор не найден.
+        /// </returns>
         [Authorize]
         [HttpGet("get-contract")]
+        [ProducesResponseType<CollectiveContract>(200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> GetContractAsync(int contractId)
         {
             var contract = await contractService.GetContractAsync(contractId);
@@ -27,9 +41,19 @@ namespace LawAssistant.Api.Controllers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Получает договоры юриста по его идентификатору.
+        /// </summary>
+        /// <param name="lawyerId">Идентификатор юриста</param>
+        /// <returns>
+        /// 200 (Ok) со списком договоров.
+        /// 404 (NotFound) если договоры не найдены.
+        /// </returns>
         [Authorize]
-        [HttpGet("get-lawyer-contracts")] 
-        public async Task<IActionResult> GetLawyerContracts(int lawyerId)
+        [HttpGet("get-lawyer-contracts")]
+        [ProducesResponseType<List<ContractDto>>(200)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> GetLawyerContracts(int lawyerId)
         {
             var lawyerContracts = await contractService.GetLawyerContractsInfoAsync(lawyerId);
 
@@ -37,27 +61,57 @@ namespace LawAssistant.Api.Controllers
                 ? NotFound() : Ok(lawyerContracts);
         }
 
+        /// <summary>
+        /// Создаёт договор.
+        /// </summary>
+        /// <param name="contractRequest">Запрос на создание договора.</param>
+        /// <returns>
+        /// 200 (Ok) с созданным договором.
+        /// 400 (BadRequest) при ошибке.
+        /// </returns>
         [Authorize]
         [HttpPost("create-contract")]
-        public async Task<IActionResult> CreateContractAsync(CreateContractRequest contractRequest)
+		[ProducesResponseType<CollectiveContract>(200)]
+		[ProducesResponseType(400)]
+		public async Task<IActionResult> CreateContractAsync(CreateContractRequest contractRequest)
         {
             var createdContract = await contractService.CreateContractAsync(contractRequest);
 
             return createdContract == null ? BadRequest() : Ok(createdContract);
         }
 
-        [Authorize]
+		/// <summary>
+		/// Изменяет существующий договор.
+		/// </summary>
+		/// <param name="contractDto">Изменённый договор.</param>
+		/// <returns>
+		/// 200 (Ok) с измённым договором.
+		/// 400 (BadRequest) при ошибке.
+		/// </returns>
+		[Authorize]
         [HttpPut("update-contract")]
-        public async Task<IActionResult> UpdateContractAsync(ContractDto contractDto)
+		[ProducesResponseType<CollectiveContract>(200)]
+		[ProducesResponseType(400)]
+		public async Task<IActionResult> UpdateContractAsync(ContractDto contractDto)
         {
             var updatedContract = await contractService.UpdateContractAsync(contractDto);
 
             return updatedContract == null ? BadRequest() : Ok(updatedContract);
         }
 
-        [Authorize]
+		/// <summary>
+		/// Удаляет существующий договор.
+		/// </summary>
+		/// <param name="contractId">Идентификатор договора.</param>
+		/// <returns>
+		/// 200 (Ok) при успешном удалении.
+		/// 400 (BadRequest) при ошибке.
+		/// </returns>
+		[Authorize]
         [HttpDelete("delete-contract")]
-        public async Task<IActionResult> DeleteContractAsync(int contractId)
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		public async Task<IActionResult> DeleteContractAsync(int contractId)
         {
             var removedContractId = await contractService.RemoveContractAsync(contractId);
 

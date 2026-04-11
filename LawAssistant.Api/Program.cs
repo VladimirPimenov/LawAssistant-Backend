@@ -18,14 +18,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(options =>
 {
-	c.SwaggerDoc("v1", new OpenApiInfo { });
-	c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	options.SwaggerDoc("v1", new OpenApiInfo
 	{
-		Name = "Authorization",
-		In = ParameterLocation.Header,
-		Type = SecuritySchemeType.ApiKey
+		Title = "Web API LawAssistant",
+		Description = "REST API сервиса анализа коллективных договоров LawAssistant",
+		Version = "v1",
 	});
 });
 
