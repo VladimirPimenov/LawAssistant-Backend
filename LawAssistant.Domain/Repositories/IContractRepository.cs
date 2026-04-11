@@ -4,11 +4,13 @@ namespace LawAssistant.Domain.Repositories
 {
 	public interface IContractRepository
 	{
-		public Task<CollectiveContract> GetCollectiveContractAsync(int contractId);
+		public Task<CollectiveContract> GetContractAsync(int contractId);
+
+		public Task<CollectiveContract> GetContractWithParagraphsAsync(int contractId);
 
 		public Task<List<CollectiveContract>> GetLawyerContractsAsync(int lawyerId);
 
-		public Task<CollectiveContract> CreateCollectiveContractAsync(CollectiveContract contract);
+		public Task<CollectiveContract> CreateContractAsync(CollectiveContract contract);
 
 		public Task<CollectiveContract> UpdateContractAsync(CollectiveContract updatedContract);
 

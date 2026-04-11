@@ -10,7 +10,12 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 		PostgreSqlDbContext dbContext)
 		: IContractRepository
 	{
-		public async Task<CollectiveContract> GetCollectiveContractAsync(int contractId)
+		public async Task<CollectiveContract> GetContractAsync(int contractId)
+		{
+			return await dbContext.CollectiveContract.FirstOrDefaultAsync(c => c.ContractId == contractId);
+		}
+
+		public async Task<CollectiveContract> GetContractWithParagraphsAsync(int contractId)
 		{
 			return await dbContext.CollectiveContract
 				.Include(c => c.ContractParagraphs)
@@ -29,7 +34,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 				.ToListAsync();
 		}
 
-		public async Task<CollectiveContract> CreateCollectiveContractAsync(CollectiveContract contract)
+		public async Task<CollectiveContract> CreateContractAsync(CollectiveContract contract)
 		{
 			dbContext.CollectiveContract.Add(contract);
 			await dbContext.SaveChangesAsync();

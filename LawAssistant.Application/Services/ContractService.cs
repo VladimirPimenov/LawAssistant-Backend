@@ -15,7 +15,7 @@ namespace LawAssistant.Application.Services
     {
         public async Task<CollectiveContract> GetContractAsync(int contractId)
         {
-            return await contractRepository.GetCollectiveContractAsync(contractId);
+            return await contractRepository.GetContractWithParagraphsAsync(contractId);
         }
 
         public async Task<List<ContractDto>> GetLawyerContractsInfoAsync(int lawyerId)
@@ -61,7 +61,7 @@ namespace LawAssistant.Application.Services
 				ContractParagraphs = new List<ContractParagraph>()
 			};
 
-			var createdContract = await contractRepository.CreateCollectiveContractAsync(contract);
+			var createdContract = await contractRepository.CreateContractAsync(contract);
 
             if (createdContract == null)
                 return null;
@@ -88,7 +88,7 @@ namespace LawAssistant.Application.Services
 
 		public async Task<CollectiveContract> UpdateContractAsync(ContractDto contractDto)
 		{
-            var dbContract = await contractRepository.GetCollectiveContractAsync(contractDto.ContractId);
+            var dbContract = await contractRepository.GetContractAsync(contractDto.ContractId);
 
             if(dbContract == null)
                 return null;
@@ -110,7 +110,7 @@ namespace LawAssistant.Application.Services
 
 		public async Task<int?> RemoveContractAsync(int contractId)
         {
-            var contract = await contractRepository.GetCollectiveContractAsync(contractId);
+            var contract = await contractRepository.GetContractAsync(contractId);
             if (contract == null)
                 return null;
 

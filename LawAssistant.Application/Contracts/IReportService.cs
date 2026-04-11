@@ -6,8 +6,8 @@ namespace LawAssistant.Application.Contracts
 	{
 		public Task<ComparisonReport> GetReportAsync(int reportId);
 
-		public Task<ComparisonReport> CreateComparisonReportAsync(int contractId);
+		public Task<ComparisonReport> CreateReportAsync(int contractId);
 
-		public Task<int> RemoveComparisonReportAsync(int reportId);
+		public Task<int?> RemoveReportAsync(int reportId);
 	}
 }

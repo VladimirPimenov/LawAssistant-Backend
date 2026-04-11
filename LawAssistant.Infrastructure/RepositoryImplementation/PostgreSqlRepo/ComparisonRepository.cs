@@ -18,5 +18,13 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
         {
             return await dbContext.CompareParagraphWithArticle(paragraph.ParagraphId, article.ArticleId);
         }
-    }
+
+		public async Task<int> RemoveComparisonResultAsync(ComparisonResult result)
+		{
+			dbContext.ComparisonResult.Remove(result);
+            await dbContext.SaveChangesAsync();
+
+            return result.ResultId;
+		}
+	}
 }

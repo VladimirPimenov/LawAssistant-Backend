@@ -48,9 +48,20 @@ namespace LawAssistant.Api.Controllers
 		[ProducesResponseType(400)]
 		public async Task<IActionResult> CreateReportForContractAsync(int contractId)
 		{
-			var createdReport = await reportService.CreateComparisonReportAsync(contractId);
+			var createdReport = await reportService.CreateReportAsync(contractId);
 
 			return createdReport == null ? BadRequest() : Ok(createdReport);
+		}
+
+		[Authorize]
+		[HttpDelete("remove-report")]
+		[ProducesResponseType<ComparisonReport>(200)]
+		[ProducesResponseType(400)]
+		public async Task<IActionResult> RemoveReportAsync(int reportId)
+		{
+			int? removedReportId = await reportService.RemoveReportAsync(reportId);
+
+			return removedReportId == null ? BadRequest() : Ok(removedReportId);
 		}
 	}
 }

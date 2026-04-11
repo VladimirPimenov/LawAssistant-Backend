@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-
+﻿using DocumentFormat.OpenXml.Bibliography;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
 using LawAssistant.Infrastructure.RepositoryImplementation.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {
@@ -25,6 +25,9 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 
         public async Task<int> RemoveReportAsync(ComparisonReport report)
         {
+            await RemoveReportResultsAsync(report.ReportId);
+            await dbContext.SaveChangesAsync();
+
             dbContext.ComparisonReport.Remove(report);
             await dbContext.SaveChangesAsync();
 
@@ -54,5 +57,17 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
                 .Where(res => reportResultsId.Contains(res.ResultId))
                 .ToListAsync();
         }
+
+        private async Task RemoveReportResultsAsync(int reportId)
+        {
+			var reportResults = await dbContext.ReportResult
+				.Where(r => r.ReportId == reportId)
+				.ToListAsync();
+
+			foreach (var result in reportResults)
+			{
+				dbContext.ReportResult.Remove(result);
+			}
+		}
     }
 }

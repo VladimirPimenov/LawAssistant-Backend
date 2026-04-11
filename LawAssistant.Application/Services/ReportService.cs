@@ -11,7 +11,7 @@ namespace LawAssistant.Application.Services
 		IContractService contractService) 
 		: IReportService
 	{
-		public async Task<ComparisonReport> CreateComparisonReportAsync(int contractId)
+		public async Task<ComparisonReport> CreateReportAsync(int contractId)
 		{
 			var contract = await contractService.GetContractAsync(contractId);
 			if (contract == null)
@@ -58,9 +58,22 @@ namespace LawAssistant.Application.Services
 			return report;
 		}
 
-		public Task<int> RemoveComparisonReportAsync(int reportId)
+		public async Task<int?> RemoveReportAsync(int reportId)
 		{
-			throw new NotImplementedException();
+			var report = await reportRepository.GetReportAsync(reportId);
+			if (report == null)
+				return null;
+
+			var reportResults = await reportRepository.GetReportResultsAsync(report);
+
+			var removedReportId = await reportRepository.RemoveReportAsync(report);
+
+			foreach(var result in reportResults)
+			{
+				await comparisonRepository.RemoveComparisonResultAsync(result);
+			}
+
+			return removedReportId;
 		}
 	}
 }
