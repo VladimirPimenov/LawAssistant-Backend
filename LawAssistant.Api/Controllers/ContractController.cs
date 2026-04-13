@@ -8,7 +8,7 @@ using LawAssistant.Domain.Entities;
 namespace LawAssistant.Api.Controllers
 {
     /// <summary>
-    /// Контроллер для работы с коллективными договорами
+    /// Контроллер для работы с коллективными договорами.
     /// </summary>
     [ApiController, Route("contract")]
     public class ContractController(

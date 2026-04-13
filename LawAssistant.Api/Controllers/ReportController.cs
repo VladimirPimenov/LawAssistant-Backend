@@ -9,7 +9,6 @@ namespace LawAssistant.Api.Controllers
 	/// <summary>
 	/// Контроллер для формирования отчётов о сопоставлении договора со статьями законодательных актов.
 	/// </summary>
-	/// <param name="reportService"></param>
 	[ApiController, Route("report")]
 	public class ReportController(
 		IReportService reportService)

@@ -10,5 +10,6 @@ namespace LawAssistant.Domain.Repositories
 
 		public Task<Lawyer> CreateLawyerAsync(Lawyer lawyer);
 
+		public Task<Lawyer> UpdateLawyerAsync(Lawyer lawyer);
 	}
 }

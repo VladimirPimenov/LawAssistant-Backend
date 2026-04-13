@@ -26,6 +26,12 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 			return await dbContext.Lawyer.FindAsync(lawyerId);
 		}
 
-		
+		public async Task<Lawyer> UpdateLawyerAsync(Lawyer lawyer)
+		{
+			dbContext.Lawyer.Update(lawyer);
+			await dbContext.SaveChangesAsync();
+
+			return lawyer;
+		}
 	}
 }

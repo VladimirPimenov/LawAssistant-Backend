@@ -48,6 +48,7 @@ builder.Services.AddScoped<IAuthentificationService, AuthentificationService>();
 
 builder.Services.AddScoped<IContractService, ContractService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<ILawyerService, LawyerService>();
 
 builder.Services.AddScoped<IDocumentParser, WordDocumentParser>();
 
