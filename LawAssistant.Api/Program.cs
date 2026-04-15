@@ -13,6 +13,7 @@ using LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo;
 using LawAssistant.Api.Extensions;
 using LawAssistant.Api.Settings;
 using LawAssistant.Application.Services.Authentification;
+using LawAssistant.Application.Contracts.S3;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,13 +41,14 @@ builder.Services.AddScoped<ILawDocumentsRepository, LawDocumentsRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
 
-builder.Services.AddScoped<IFileService, LocalFileService>();
+builder.Services.AddScoped<IS3Adapter, S3MockService>();
 
 builder.Services.AddScoped<IHashService, SHA256HashService>();
 builder.Services.AddScoped<ITokenProvider, JwtTokenProvider>();
 builder.Services.AddScoped<IAuthentificationService, AuthentificationService>();
 
 builder.Services.AddScoped<IContractService, ContractService>();
+builder.Services.AddScoped<IContractFileService, ContractFileService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<ILawyerService, LawyerService>();
 

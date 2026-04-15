@@ -1,16 +1,17 @@
 ﻿using LawAssistant.Application.Contracts;
+using LawAssistant.Application.Contracts.S3;
+
 using LawAssistant.Application.Converters;
 using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
-using System.Diagnostics.Contracts;
 
 namespace LawAssistant.Application.Services
 {
     public class ContractService(
         IContractRepository contractRepository,
-        ILawyerRepository lawyerRepository,
-        IFileService fileService,
+        ILawyerService lawyerService,
+        IContractFileService fileService,
         IDocumentParser documentParser)
         : IContractService
     {
@@ -58,13 +59,13 @@ namespace LawAssistant.Application.Services
 			};
 
 			var createdContract = await contractRepository.CreateContractAsync(contract);
-
             if (createdContract == null)
                 return null;
 
 			await AddAuthorsToContractAsync(contractAuthors, createdContract);
 
-            string documentKey = await fileService.LoadFileToServer(contractRequest.ContractFile);
+            Guid fileKey = await fileService.SaveContractFileAsync(contractRequest.ContractFile);
+            createdContract.FileKey = fileKey;
 
             var paragraphs = documentParser.ParseDocumentIntoParagraphs(contractRequest.ContractFile);
 
@@ -119,7 +120,7 @@ namespace LawAssistant.Application.Services
 
         private async Task<List<Lawyer>> GetContractAuthorsFromRequestAsync(CreateContractRequest contractRequest)
         {
-            var authorsFindTasks = contractRequest.AuthorsId.Select(lawyerRepository.GetLawyerAsync);
+            var authorsFindTasks = contractRequest.AuthorsId.Select(lawyerService.GetLawyerAsync);
             var authors = await Task.WhenAll(authorsFindTasks);
 
             return authors.ToList();
@@ -155,7 +156,7 @@ namespace LawAssistant.Application.Services
 
             foreach(var authorId in addedAuthorsId)
             {
-                var author = await lawyerRepository.GetLawyerAsync(authorId);
+                var author = await lawyerService.GetLawyerAsync(authorId);
                 addedAuthors.Add(author);
             }
             return addedAuthors;
@@ -173,10 +174,10 @@ namespace LawAssistant.Application.Services
 
 			foreach (var authorId in removedAuthorsId)
 			{
-				var author = await lawyerRepository.GetLawyerAsync(authorId);
+				var author = await lawyerService.GetLawyerAsync(authorId);
 				removedAuthors.Add(author);
 			}
 			return removedAuthors;
 		}
-	}
+    }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using LawAssistant.Application.Models;
 using LawAssistant.Application.Contracts;
 using LawAssistant.Domain.Entities;
+using LawAssistant.Application.Contracts.S3;
 
 namespace LawAssistant.Api.Controllers
 {
@@ -12,7 +13,8 @@ namespace LawAssistant.Api.Controllers
     /// </summary>
     [ApiController, Route("contract")]
     public class ContractController(
-        IContractService contractService)
+        IContractService contractService,
+        IContractFileService contractFileService)
         : ControllerBase
     {
         /// <summary>
@@ -34,12 +36,30 @@ namespace LawAssistant.Api.Controllers
             return contract == null ? NotFound() : Ok(contract);
         }
 
+        /// <summary>
+        /// Получает файл договора по его идентификатору.
+        /// </summary>
+        /// <param name="contactId">Идентификатор договора</param>
+        /// <returns>
+        /// Файл договора.
+        /// 404 (NotFound), если договор/файл не найден.
+        /// </returns>
         [Authorize]
         [HttpGet("get-contract-file")]
         public async Task<IActionResult> GetContractFileAsync(int contactId)
         {
-            throw new NotImplementedException();
-        }
+            var file = await contractFileService.LoadContractFileAsync(contactId);
+
+            if(file == null)
+                return NotFound();
+
+			var stream = file.OpenReadStream();
+
+            string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            string fileName = $"contract-{contactId}";
+
+			return File(stream, contentType, fileName);
+		}
 
         /// <summary>
         /// Получает договоры юриста по его идентификатору.

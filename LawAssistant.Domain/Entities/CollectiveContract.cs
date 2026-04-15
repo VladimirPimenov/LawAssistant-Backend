@@ -9,5 +9,7 @@
 		public DateTime CreatedDate { get; set; }
 
 		public List<ContractParagraph> ContractParagraphs { get; set; }
+
+		public Guid? FileKey { get; set; }
 	}
 }
