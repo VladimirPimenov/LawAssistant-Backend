@@ -15,6 +15,21 @@ namespace LawAssistant.Api.Controllers
         : ControllerBase
     {
         /// <summary>
+        /// Получает список всех юристов.
+        /// </summary>
+        /// <returns>
+        /// 200 (Ok) со списком юристов.
+        /// 404 (NotFound) если ничего не найдено (проблема с БД).
+        /// </returns>
+        [Authorize]
+        [HttpGet("get-all")]
+        public async Task<IActionResult> GetLawyersList()
+        {
+            var lawyers = await lawyerService.GetLawyersListAsync();
+
+            return lawyers == null ? NotFound() : Ok(lawyers);
+        }
+        /// <summary>
         /// Изменяет имя и фамилию юриста.
         /// </summary>
         /// <param name="lawyer">Обновлённые данные юриста</param>

@@ -33,5 +33,10 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 
 			return lawyer;
 		}
+
+		public async Task<List<Lawyer>> GetAllLawyersAsync()
+		{
+			return await dbContext.Lawyer.ToListAsync();
+		}
 	}
 }

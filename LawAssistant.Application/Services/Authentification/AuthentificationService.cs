@@ -9,7 +9,7 @@ namespace LawAssistant.Application.Services.Authentification
     public class AuthentificationService(
         IHashService hashService,
         ITokenProvider tokenProvider,
-        ILawyerRepository lawyerRepository) 
+        ILawyerService lawyerService) 
         : IAuthentificationService
     {
         public async Task<RegisterResponce> RegisterAsync(RegisterRequest registerRequest)
@@ -24,8 +24,7 @@ namespace LawAssistant.Application.Services.Authentification
                 HashedPassword = hashedPassword
             };
 
-            var registeredUser = await lawyerRepository.CreateLawyerAsync(newUser);
-
+            var registeredUser = await lawyerService.CreateLawyerAsync(newUser);
             if (registeredUser == null)
                 return null;
 
@@ -40,7 +39,7 @@ namespace LawAssistant.Application.Services.Authentification
 
         public async Task<string> LoginAsync(LoginRequest loginRequest)
         {
-            var user = await lawyerRepository.GetLawyerByEmailAsync(loginRequest.Email);
+            var user = await lawyerService.GetLawyerByEmailAsync(loginRequest.Email);
 
             if (user == null)
                 return null;

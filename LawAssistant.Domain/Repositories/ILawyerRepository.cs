@@ -8,6 +8,8 @@ namespace LawAssistant.Domain.Repositories
 
 		public Task<Lawyer> GetLawyerByEmailAsync(string email);
 
+		public Task<List<Lawyer>> GetAllLawyersAsync();
+
 		public Task<Lawyer> CreateLawyerAsync(Lawyer lawyer);
 
 		public Task<Lawyer> UpdateLawyerAsync(Lawyer lawyer);

@@ -1,4 +1,5 @@
 ﻿using LawAssistant.Application.Contracts;
+using LawAssistant.Application.Converters;
 using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
@@ -26,14 +27,9 @@ namespace LawAssistant.Application.Services
             foreach(var contract in contracts)
             {
                 var authors = await contractRepository.GetContractAuthorsAsync(contract);
-                var authorsDto = authors.
-                    Select(a => new LawyerDto
-                    {
-                        LawyerId = a.LawyerId,
-                        FirstName = a.FirstName,
-                        LastName = a.LastName,
-                        Email = a.Email
-                    }).ToList();
+                var authorsDto = authors
+                    .Select(a => a.ConvertToDto())
+                    .ToList();
 
                 contractsInfo.Add(new ContractDto
                 {
