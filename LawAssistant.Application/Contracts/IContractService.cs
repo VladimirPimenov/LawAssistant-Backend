@@ -7,7 +7,9 @@ namespace LawAssistant.Application.Contracts
 	{
 		public Task<List<ContractDto>> GetLawyerContractsInfoAsync(int lawyerId);
 
-		public Task<CollectiveContract> GetContractAsync(int contractId);
+		public Task<ContractDto> GetContractAsync(int contractId);
+
+		public Task<CollectiveContract> GetContractWithParagraphsAsync(int contractId);
 
 		public Task<CollectiveContract> CreateContractAsync(CreateContractRequest contractRequest);
 

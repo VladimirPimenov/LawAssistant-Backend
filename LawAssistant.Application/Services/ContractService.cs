@@ -15,7 +15,22 @@ namespace LawAssistant.Application.Services
         IDocumentParser documentParser)
         : IContractService
     {
-        public async Task<CollectiveContract> GetContractAsync(int contractId)
+        public async Task<ContractDto> GetContractAsync(int contractId)
+        {
+            var contract = await contractRepository.GetContractAsync(contractId);
+            if (contract == null)
+                return null;
+
+            var contractAuthors = await contractRepository.GetContractAuthorsAsync(contract);
+            var authorsDto = contractAuthors
+                .Select(a => a.ConvertToDto())
+                .ToList();
+            var contractDto = contract.ConvertToDto(authorsDto);
+
+            return contractDto;
+        }
+
+        public async Task<CollectiveContract> GetContractWithParagraphsAsync(int contractId)
         {
             return await contractRepository.GetContractWithParagraphsAsync(contractId);
         }
@@ -31,14 +46,9 @@ namespace LawAssistant.Application.Services
                 var authorsDto = authors
                     .Select(a => a.ConvertToDto())
                     .ToList();
+                var contractDto = contract.ConvertToDto(authorsDto);
 
-                contractsInfo.Add(new ContractDto
-                {
-                    ContractId = contract.ContractId,
-                    Title = contract.Title,
-                    CreatedDate = contract.CreatedDate,
-                    Authors = authorsDto
-                });
+                contractsInfo.Add(contractDto);
             }
 
             return contractsInfo;
@@ -107,7 +117,7 @@ namespace LawAssistant.Application.Services
 
 		public async Task<int?> RemoveContractAsync(int contractId)
         {
-            var contract = await contractRepository.GetContractAsync(contractId);
+            var contract = await contractRepository.GetContractWithParagraphsAsync(contractId);
             if (contract == null)
                 return null;
 

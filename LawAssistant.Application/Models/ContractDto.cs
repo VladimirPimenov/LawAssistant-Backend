@@ -8,6 +8,8 @@
 
         public DateTime CreatedDate { get; init; }
 
+        public Guid? FileKey { get; init;  }
+
         public List<LawyerDto> Authors { get; init; }
     }
 }

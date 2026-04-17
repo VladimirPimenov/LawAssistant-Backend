@@ -13,7 +13,7 @@ namespace LawAssistant.Application.Services
 	{
 		public async Task<ComparisonReport> CreateReportAsync(int contractId)
 		{
-			var contract = await contractService.GetContractAsync(contractId);
+			var contract = await contractService.GetContractWithParagraphsAsync(contractId);
 			if (contract == null)
 				return null;
 
