@@ -69,5 +69,59 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 				dbContext.ReportResult.Remove(result);
 			}
 		}
-    }
+
+		public async Task AddReportToLawyerAsync(ComparisonReport report, Lawyer lawyer)
+		{
+            var lawyerReport = new LawyerReport
+            {
+                ReportId = report.ReportId,
+                LawyerId = lawyer.LawyerId
+            };
+
+            dbContext.LawyerReport.Add(lawyerReport);
+            await dbContext.SaveChangesAsync();
+		}
+
+		public async Task RemoveReportFromLawyerAsync(ComparisonReport report, Lawyer lawyer)
+		{
+            var lawyerReport = await dbContext.LawyerReport
+                                .FirstOrDefaultAsync(lr =>
+                                lr.LawyerId == lawyer.LawyerId
+                                && lr.ReportId == report.ReportId);
+
+			dbContext.LawyerReport.Remove(lawyerReport);
+			await dbContext.SaveChangesAsync();
+		}
+
+		public async Task<List<Lawyer>> GetReportLawyersAsync(ComparisonReport report)
+		{
+			var lawyersId = await dbContext.LawyerReport
+                .Where(lr => lr.ReportId == report.ReportId)
+                .Select(lr => lr.LawyerId)
+                .ToListAsync();
+
+            return await dbContext.Lawyer
+                .Where(l => lawyersId.Contains(l.LawyerId))
+                .ToListAsync();
+		}
+
+		public async Task<List<ComparisonReport>> GetContractReportsAsync(int contractId)
+		{
+            return await dbContext.ComparisonReport
+                .Where(r => r.ContractId == contractId)
+                .ToListAsync();
+		}
+
+		public async Task<List<ComparisonReport>> GetLawyerReportsAsync(int lawyerId)
+		{
+			var reportsId = await dbContext.LawyerReport
+				.Where(lr => lr.LawyerId == lawyerId)
+                .Select(lr => lr.ReportId)
+				.ToListAsync();
+
+            return await dbContext.ComparisonReport
+                .Where(r => reportsId.Contains(r.ReportId))
+                .ToListAsync();
+		}
+	}
 }

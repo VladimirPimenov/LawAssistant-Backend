@@ -1,4 +1,6 @@
-﻿namespace LawAssistant.Infrastructure.RepositoryImplementation.Models
+﻿using LawAssistant.Domain.Entities;
+
+namespace LawAssistant.Infrastructure.RepositoryImplementation.Models
 {
 	public record ReportResult
 	{

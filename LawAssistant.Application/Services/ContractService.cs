@@ -130,10 +130,14 @@ namespace LawAssistant.Application.Services
 
         private async Task<List<Lawyer>> GetContractAuthorsFromRequestAsync(CreateContractRequest contractRequest)
         {
-            var authorsFindTasks = contractRequest.AuthorsId.Select(lawyerService.GetLawyerAsync);
-            var authors = await Task.WhenAll(authorsFindTasks);
+            var authors = new List<Lawyer>();
 
-            return authors.ToList();
+            foreach(var authorId in contractRequest.AuthorsId)
+            {
+                var author = await lawyerService.GetLawyerAsync(authorId);
+                authors.Add(author);
+            }
+            return authors;
         }
 
         private async Task AddAuthorsToContractAsync(List<Lawyer> authors, CollectiveContract contract)

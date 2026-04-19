@@ -1,4 +1,6 @@
 ﻿using LawAssistant.Application.Contracts;
+using LawAssistant.Application.Converters;
+using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
 
@@ -21,12 +23,15 @@ namespace LawAssistant.Application.Services
 
 			var report = new ComparisonReport
 			{
-				ReportedDate = DateTime.Now.ToUniversalTime()
+				ReportedDate = DateTime.Now.ToUniversalTime(),
+				ContractId = contractId
 			};
 
 			var createdReport = await reportRepository.CreateReportAsync(report);
 			if (createdReport == null)
 				return null;
+
+			await SetContractAuthorsToReport(contract, createdReport);
 
 			createdReport.ComparisonResults = new List<ComparisonResult>();
 
@@ -64,6 +69,9 @@ namespace LawAssistant.Application.Services
 			if (report == null)
 				return null;
 
+			var reportLawyers = await reportRepository.GetReportLawyersAsync(report);
+			await RemoveAllLawyersFromReport(reportLawyers, report);
+
 			var reportResults = await reportRepository.GetReportResultsAsync(report);
 
 			var removedReportId = await reportRepository.RemoveReportAsync(report);
@@ -74,6 +82,65 @@ namespace LawAssistant.Application.Services
 			}
 
 			return removedReportId;
+		}
+
+		private async Task SetContractAuthorsToReport(CollectiveContract contract, ComparisonReport report)
+		{
+			var contractWithAuthors = await contractService.GetContractAsync(contract.ContractId);
+
+			foreach(var author in contractWithAuthors.Authors)
+			{
+				var lawyer = new Lawyer
+				{
+					LawyerId = author.LawyerId,
+					FirstName = author.FirstName,
+					LastName = author.LastName,
+					Email = author.Email
+				};
+
+				await reportRepository.AddReportToLawyerAsync(report, lawyer);
+			}
+		}
+
+		private async Task RemoveAllLawyersFromReport(List<Lawyer> lawyers, ComparisonReport report)
+		{
+			foreach(var lawyer in lawyers)
+			{
+				await reportRepository.RemoveReportFromLawyerAsync(report, lawyer);
+			}
+			await Task.CompletedTask;
+		}
+
+		public async Task<List<ReportDto>> GetContractReportsAsync(int contractId)
+		{
+			var contract = await contractService.GetContractAsync(contractId);
+			if (contract == null)
+				return null;
+
+			var reports = await reportRepository.GetContractReportsAsync(contract.ContractId);
+			var reportsDto = new List<ReportDto>();
+
+			foreach(var report in reports)
+			{
+				var dto = report.ConvertToDto(contract);
+				reportsDto.Add(dto);
+			}
+			return reportsDto;
+		}
+
+		public async Task<List<ReportDto>> GetLawyerReportsAsync(int lawyerId)
+		{
+			var reports = await reportRepository.GetLawyerReportsAsync(lawyerId);
+			var reportsDto = new List<ReportDto>();
+
+			foreach(var report in reports)
+			{
+				var contract = await contractService.GetContractAsync(report.ContractId);
+
+				var dto = report.ConvertToDto(contract);
+				reportsDto.Add(dto);
+			}
+			return reportsDto;
 		}
 	}
 }

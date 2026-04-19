@@ -20,6 +20,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 		public DbSet<ComparisonReport>  ComparisonReport { get; set; }
 		public DbSet<ComparisonResult> ComparisonResult { get; set; }
 		public DbSet<ReportResult> ReportResult { get; set; }
+		public DbSet<LawyerReport> LawyerReport { get; set; }
 
 		public PostgreSqlDbContext(DbContextOptions<PostgreSqlDbContext> options) : base(options) { }
 
@@ -33,6 +34,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 			modelBuilder.Entity<ComparisonResult>().HasKey(cr => cr.ResultId);
 			modelBuilder.Entity<ComparisonReport>().HasKey(cre => cre.ReportId);
 			modelBuilder.Entity<ReportResult>().HasKey(rr => rr.ReportResultId);
+			modelBuilder.Entity<LawyerReport>().HasKey(lr => lr.LawyerReportId);
 
 			modelBuilder.Entity<CollectiveContract>()
 				.HasMany(c => c.ContractParagraphs)
