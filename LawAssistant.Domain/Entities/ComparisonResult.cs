@@ -7,5 +7,7 @@
         public int ArticleId { get; set; }
 
         public string Text { get; set; }
+
+        public float MatchValue { get; set; }
     }
 }

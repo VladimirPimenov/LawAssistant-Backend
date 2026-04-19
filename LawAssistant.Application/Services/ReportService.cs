@@ -3,6 +3,7 @@ using LawAssistant.Application.Converters;
 using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
+using System.Security.AccessControl;
 
 namespace LawAssistant.Application.Services
 {
@@ -13,6 +14,49 @@ namespace LawAssistant.Application.Services
 		IContractService contractService) 
 		: IReportService
 	{
+		public async Task<ComparisonReport> GetReportAsync(int reportId)
+		{
+			var report = await reportRepository.GetReportAsync(reportId);
+			if (report == null)
+				return null;
+
+			report.ComparisonResults = await reportRepository.GetReportResultsAsync(report);
+
+			return report;
+		}
+
+		public async Task<List<ReportDto>> GetContractReportsAsync(int contractId)
+		{
+			var contract = await contractService.GetContractAsync(contractId);
+			if (contract == null)
+				return null;
+
+			var reports = await reportRepository.GetContractReportsAsync(contract.ContractId);
+			var reportsDto = new List<ReportDto>();
+
+			foreach (var report in reports)
+			{
+				var dto = report.ConvertToDto(contract);
+				reportsDto.Add(dto);
+			}
+			return reportsDto;
+		}
+
+		public async Task<List<ReportDto>> GetLawyerReportsAsync(int lawyerId)
+		{
+			var reports = await reportRepository.GetLawyerReportsAsync(lawyerId);
+			var reportsDto = new List<ReportDto>();
+
+			foreach (var report in reports)
+			{
+				var contract = await contractService.GetContractAsync(report.ContractId);
+
+				var dto = report.ConvertToDto(contract);
+				reportsDto.Add(dto);
+			}
+			return reportsDto;
+		}
+
 		public async Task<ComparisonReport> CreateReportAsync(int contractId)
 		{
 			var contract = await contractService.GetContractWithParagraphsAsync(contractId);
@@ -39,28 +83,20 @@ namespace LawAssistant.Application.Services
 			{
 				foreach(var lawAct in lawActs)
 				{
-					foreach(var acrticle in lawAct.Articles)
-					{
-						int comparisonResultId = await comparisonRepository.CompareParagraphWithArticle(paragraph, acrticle);
-						var result = await comparisonRepository.GetComparisonResultAsync(comparisonResultId);
+					var actComparisonResults = await CompareParagraphWithAct(paragraph, lawAct);
+					var bestResult = GetMostMatchedResult(actComparisonResults);
 
-						report.ComparisonResults.Add(result);
-						await reportRepository.AddResultToReportAsync(result, report);
+					foreach(var result in actComparisonResults)
+					{
+						if(result.ResultId != bestResult.ResultId)
+							await comparisonRepository.RemoveComparisonResultAsync(result);
 					}
+
+					createdReport.ComparisonResults.Add(bestResult);
+					await reportRepository.AddResultToReportAsync(bestResult, createdReport);
 				}
 			}
-			return report;
-		}
-
-		public async Task<ComparisonReport> GetReportAsync(int reportId)
-		{
-			var report = await reportRepository.GetReportAsync(reportId);
-			if (report == null)
-				return null;
-
-			report.ComparisonResults = await reportRepository.GetReportResultsAsync(report);
-
-			return report;
+			return createdReport;
 		}
 
 		public async Task<int?> RemoveReportAsync(int reportId)
@@ -111,36 +147,27 @@ namespace LawAssistant.Application.Services
 			await Task.CompletedTask;
 		}
 
-		public async Task<List<ReportDto>> GetContractReportsAsync(int contractId)
+		private async Task<List<ComparisonResult>> CompareParagraphWithAct(ContractParagraph paragraph, LawAct act)
 		{
-			var contract = await contractService.GetContractAsync(contractId);
-			if (contract == null)
-				return null;
+			var comparisonResults = new List<ComparisonResult>();
 
-			var reports = await reportRepository.GetContractReportsAsync(contract.ContractId);
-			var reportsDto = new List<ReportDto>();
-
-			foreach(var report in reports)
+			foreach (var acrticle in act.Articles)
 			{
-				var dto = report.ConvertToDto(contract);
-				reportsDto.Add(dto);
+				int comparisonResultId = await comparisonRepository.CompareParagraphWithArticle(paragraph, acrticle);
+				var result = await comparisonRepository.GetComparisonResultAsync(comparisonResultId);
+
+				comparisonResults.Add(result);
 			}
-			return reportsDto;
+
+			return comparisonResults;
 		}
 
-		public async Task<List<ReportDto>> GetLawyerReportsAsync(int lawyerId)
+		private ComparisonResult GetMostMatchedResult(List<ComparisonResult> results)
 		{
-			var reports = await reportRepository.GetLawyerReportsAsync(lawyerId);
-			var reportsDto = new List<ReportDto>();
+			var maxMatchValue = results.Max(r => r.MatchValue);
+			var bestResult = results.FirstOrDefault(r => r.MatchValue == maxMatchValue);
 
-			foreach(var report in reports)
-			{
-				var contract = await contractService.GetContractAsync(report.ContractId);
-
-				var dto = report.ConvertToDto(contract);
-				reportsDto.Add(dto);
-			}
-			return reportsDto;
+			return bestResult;
 		}
 	}
 }
