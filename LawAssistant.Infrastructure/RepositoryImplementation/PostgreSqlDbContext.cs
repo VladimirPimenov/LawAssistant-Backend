@@ -50,8 +50,10 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 				.Property(l => l.HashedPassword)
 				.HasColumnName("Password");
 
-			modelBuilder.Entity<ComparisonReport>()
-				.Ignore(r => r.ComparisonResults);
+			modelBuilder.Entity<ComparisonResult>()
+				.HasOne(r => r.ContractParagraph)
+				.WithMany()
+				.HasForeignKey(r => r.ParagraphId);
 		}
 	}
 }

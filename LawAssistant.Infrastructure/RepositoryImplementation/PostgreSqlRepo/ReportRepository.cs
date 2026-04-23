@@ -55,6 +55,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 
             return await dbContext.ComparisonResult
                 .Where(res => reportResultsId.Contains(res.ResultId))
+                .Include(res => res.ContractParagraph)
                 .ToListAsync();
         }
 
