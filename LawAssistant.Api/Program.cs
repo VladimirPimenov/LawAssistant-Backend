@@ -6,6 +6,7 @@ using LawAssistant.Domain.Repositories;
 using LawAssistant.Application.Contracts;
 using LawAssistant.Application.Services;
 
+using LawAssistant.Infrastructure;
 using LawAssistant.Infrastructure.FileStorage;
 using LawAssistant.Infrastructure.RepositoryImplementation;
 using LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo;
@@ -45,6 +46,8 @@ builder.Services.AddDbContext<PostgreSqlDbContext>(options =>
 		.GetSection(nameof(DbConfiguration))
 		.Get<DbConfiguration>().PostreSqlConnectionString));
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<ILawyerRepository, LawyerRepository>();
 builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<ILawDocumentsRepository, LawDocumentsRepository>();
@@ -52,6 +55,7 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
 
 builder.Services.AddScoped<IS3Adapter, S3MockService>();
+builder.Services.AddScoped<ISemanticModuleApiClient, SemanticModuleClient>();
 
 builder.Services.AddScoped<IHashService, SHA256HashService>();
 builder.Services.AddScoped<ITokenProvider, JwtTokenProvider>();

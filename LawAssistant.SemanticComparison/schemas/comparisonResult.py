@@ -1,14 +1,14 @@
 from pydantic import BaseModel
 
-class ArticleSchema(BaseModel):
-    articleId: int
-    actId: int
-    number: str
-    title: str
+class ParagraphSchema(BaseModel):
+    paragraphId: int
+    contractId: int
     text: str
 
 class ComparisonResultSchema(BaseModel):
     resultId: int
-    article: ArticleSchema
+    articleId: int
+    paragraphId: int
+    contractParagraph: ParagraphSchema
     text: str
     matchValue: float

@@ -7,8 +7,8 @@ class CompareService:
         self.embeddingService = EmbeddingService()
 
     def calculateSemanticSimilarity(self, compareResult: ComparisonResultSchema) -> ComparisonResultSchema:
-        paragraphText = compareResult.text
-        articleId = compareResult.article.articleId
+        paragraphText = compareResult.contractParagraph.text
+        articleId = compareResult.articleId
 
         similarity = self.embeddingService.compareTextWithEmbedding(paragraphText, articleId)
         compareResult.matchValue = similarity

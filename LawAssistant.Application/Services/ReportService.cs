@@ -10,7 +10,8 @@ namespace LawAssistant.Application.Services
 		IReportRepository reportRepository,
 		ILawDocumentsRepository lawDocumentsRepository,
 		IComparisonRepository comparisonRepository,
-		IContractService contractService) 
+		IContractService contractService,
+		ISemanticModuleApiClient semanticModuleClient) 
 		: IReportService
 	{
 		private readonly int bestResultsCount = 5;
@@ -93,6 +94,8 @@ namespace LawAssistant.Application.Services
 					}
 				}
 			}
+			var syntacticResults = await reportRepository.GetReportResultsAsync(createdReport);
+			await MakeSemanticComparison(syntacticResults);
 
 			var reportWithResults = await CreateReportForFrontendAsync(createdReport);
 			return reportWithResults;
@@ -236,5 +239,18 @@ namespace LawAssistant.Application.Services
 			return paragraphsForReport;
 		}
 	
+		private async Task MakeSemanticComparison(List<ComparisonResult> syntacticResults)
+		{
+			foreach(var result in syntacticResults)
+			{
+				var semanticResult = await semanticModuleClient.CompareWithEmbeddingAsync(result);
+
+				if (semanticResult == null)
+					continue;
+
+				result.MatchValue = semanticResult.MatchValue;
+				await comparisonRepository.UpdateComparisonResultAsync(result);
+			}
+		}
 	}
 }
