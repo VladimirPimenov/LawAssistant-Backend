@@ -8,15 +8,11 @@ namespace LawAssistant.Application.Services
 {
 	public class ReportService(
 		IReportRepository reportRepository,
-		ILawDocumentsRepository lawDocumentsRepository,
-		IComparisonRepository comparisonRepository,
 		IContractService contractService,
-		ISemanticModuleApiClient semanticModuleClient) 
+		IComparisonService comparisonService,
+		ILawDocumentsRepository lawDocumentsRepository) 
 		: IReportService
 	{
-		private readonly int bestResultsCount = 5;
-		private readonly double minMatchValue = 0.001;
-
 		public async Task<ReportWithResults> GetReportAsync(int reportId)
 		{
 			var report = await reportRepository.GetReportAsync(reportId);
@@ -66,8 +62,6 @@ namespace LawAssistant.Application.Services
 			if (contract == null)
 				return null;
 
-			var lawActs = await lawDocumentsRepository.GetAllActsAsync();
-
 			var report = new ComparisonReport
 			{
 				ReportedDate = DateTime.Now.ToUniversalTime(),
@@ -80,22 +74,13 @@ namespace LawAssistant.Application.Services
 
 			await SetContractAuthorsToReport(contract, createdReport);
 
-			foreach(var paragraph in contract.ContractParagraphs)
+			var syntacticComparisonResults = await comparisonService.MakeSyntacticComparisonAsync(contract.ContractParagraphs);
+			foreach(var result in syntacticComparisonResults)
 			{
-				foreach(var lawAct in lawActs)
-				{
-					var actComparisonResults = await CompareParagraphWithAct(paragraph, lawAct);
-					var bestResults = GetMostMatchedResults(actComparisonResults, bestResultsCount);
-					await RemoveResultsBesidesBest(actComparisonResults, bestResults);
-
-					foreach(var result in bestResults)
-					{
-						await reportRepository.AddResultToReportAsync(result, createdReport);
-					}
-				}
+				await reportRepository.AddResultToReportAsync(result, createdReport);
 			}
-			var syntacticResults = await reportRepository.GetReportResultsAsync(createdReport);
-			await MakeSemanticComparison(syntacticResults);
+
+			await comparisonService.MakeSemanticComparisonAsync(syntacticComparisonResults);
 
 			var reportWithResults = await CreateReportForFrontendAsync(createdReport);
 			return reportWithResults;
@@ -116,7 +101,7 @@ namespace LawAssistant.Application.Services
 
 			foreach(var result in reportResults)
 			{
-				await comparisonRepository.RemoveComparisonResultAsync(result);
+				await comparisonService.RemoveComparisonResultAsync(result.ResultId);
 			}
 
 			return removedReportId;
@@ -149,45 +134,6 @@ namespace LawAssistant.Application.Services
 			await Task.CompletedTask;
 		}
 
-		private async Task<List<ComparisonResult>> CompareParagraphWithAct(ContractParagraph paragraph, LawAct act)
-		{
-			var comparisonResults = new List<ComparisonResult>();
-
-			foreach (var acrticle in act.Articles)
-			{
-				int comparisonResultId = await comparisonRepository.CompareParagraphWithArticle(paragraph, acrticle);
-				var result = await comparisonRepository.GetComparisonResultAsync(comparisonResultId);
-
-				comparisonResults.Add(result);
-			}
-
-			return comparisonResults;
-		}
-
-		private List<ComparisonResult> GetMostMatchedResults(List<ComparisonResult> results, int topCount)
-		{
-			var bestResults = results
-				.Where(r => r.MatchValue >= minMatchValue)
-				.OrderByDescending(r => r.MatchValue)
-				.Take(topCount)
-				.ToList();
-
-			return bestResults;
-		}
-	
-		private async Task RemoveResultsBesidesBest(List<ComparisonResult> allResults, List<ComparisonResult> bestResults)
-		{
-			var bestResultsId = bestResults
-				.Select(r => r.ResultId)
-				.ToList();
-
-			foreach(var result in allResults)
-			{
-				if (!bestResultsId.Contains(result.ResultId))
-					await comparisonRepository.RemoveComparisonResultAsync(result);
-			}
-		}
-	
 		private async Task<ReportWithResults> CreateReportForFrontendAsync(ComparisonReport report)
 		{
 			var comparisonResults = await reportRepository.GetReportResultsAsync(report);
@@ -237,20 +183,6 @@ namespace LawAssistant.Application.Services
 			}
 
 			return paragraphsForReport;
-		}
-	
-		private async Task MakeSemanticComparison(List<ComparisonResult> syntacticResults)
-		{
-			foreach(var result in syntacticResults)
-			{
-				var semanticResult = await semanticModuleClient.CompareWithEmbeddingAsync(result);
-
-				if (semanticResult == null)
-					continue;
-
-				result.MatchValue = semanticResult.MatchValue;
-				await comparisonRepository.UpdateComparisonResultAsync(result);
-			}
 		}
 	}
 }

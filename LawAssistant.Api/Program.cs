@@ -65,6 +65,7 @@ builder.Services.AddScoped<IContractService, ContractService>();
 builder.Services.AddScoped<IContractFileService, ContractFileService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<ILawyerService, LawyerService>();
+builder.Services.AddScoped<IComparisonService, ComparisonService>();
 
 builder.Services.AddScoped<IDocumentParser, WordDocumentParser>();
 
