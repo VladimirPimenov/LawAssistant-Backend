@@ -12,7 +12,8 @@ namespace LawAssistant.Application.Services
         IContractRepository contractRepository,
         ILawyerService lawyerService,
         IContractFileService fileService,
-        IDocumentParser documentParser)
+        IDocumentParser documentParser,
+        INotificationService notificationService)
         : IContractService
     {
         public async Task<ContractDto> GetContractAsync(int contractId)
@@ -89,6 +90,8 @@ namespace LawAssistant.Application.Services
             }	
 
             createdContract = await contractRepository.UpdateContractAsync(createdContract);
+
+            await CreateAuthorsNotificationAsync(createdContract, contractAuthors);
 
             return createdContract;
         }
@@ -193,5 +196,15 @@ namespace LawAssistant.Application.Services
 			}
 			return removedAuthors;
 		}
+    
+        private async Task CreateAuthorsNotificationAsync(CollectiveContract contract, List<Lawyer> lawyers)
+        {
+            string notificationText = $"Загружен документ {contract.Title}";
+
+            foreach(var lawyer in lawyers)
+            {
+                await notificationService.CreateNotificationAsync(notificationText, lawyer.LawyerId);
+            }
+        }
     }
 }

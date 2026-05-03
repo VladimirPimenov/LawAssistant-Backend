@@ -53,9 +53,12 @@ builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<ILawDocumentsRepository, LawDocumentsRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
 builder.Services.AddScoped<IS3Adapter, S3MockService>();
 builder.Services.AddScoped<ISemanticModuleApiClient, SemanticModuleClient>();
+
+builder.Services.AddScoped<INotificationService, SiteNotificationService>();
 
 builder.Services.AddScoped<IHashService, SHA256HashService>();
 builder.Services.AddScoped<ITokenProvider, JwtTokenProvider>();

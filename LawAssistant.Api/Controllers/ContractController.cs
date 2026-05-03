@@ -25,11 +25,11 @@ namespace LawAssistant.Api.Controllers
         /// 200 (Ок) с найденным договором.
         /// 404 (NotFound) если договор не найден.
         /// </returns>
-        [Authorize]
+        //[Authorize]
         [HttpGet("get-contract")]
         [ProducesResponseType<CollectiveContract>(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetContractAsync(int contractId)
+        public async Task<IActionResult> GetContractAsync([FromQuery] int contractId)
         {
             var contract = await contractService.GetContractAsync(contractId);
 
@@ -44,11 +44,11 @@ namespace LawAssistant.Api.Controllers
         /// Файл договора.
         /// 404 (NotFound), если договор/файл не найден.
         /// </returns>
-        [Authorize]
+        //[Authorize]
         [HttpGet("get-contract-file")]
-        public async Task<IActionResult> GetContractFileAsync(int contactId)
+        public async Task<IActionResult> GetContractFileAsync([FromQuery] int contractId)
         {
-            var file = await contractFileService.LoadContractFileAsync(contactId);
+            var file = await contractFileService.LoadContractFileAsync(contractId);
 
             if(file == null)
                 return NotFound();
@@ -56,7 +56,7 @@ namespace LawAssistant.Api.Controllers
 			var stream = file.OpenReadStream();
 
             string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            string fileName = $"contract-{contactId}";
+            string fileName = $"contract-{contractId}";
 
 			return File(stream, contentType, fileName);
 		}
@@ -69,16 +69,15 @@ namespace LawAssistant.Api.Controllers
         /// 200 (Ok) со списком договоров.
         /// 404 (NotFound) если договоры не найдены.
         /// </returns>
-        [Authorize]
+        //[Authorize]
         [HttpGet("get-lawyer-contracts")]
         [ProducesResponseType<List<ContractDto>>(200)]
 		[ProducesResponseType(404)]
-		public async Task<IActionResult> GetLawyerContracts(int lawyerId)
+		public async Task<IActionResult> GetLawyerContracts([FromQuery] int lawyerId)
         {
             var lawyerContracts = await contractService.GetLawyerContractsInfoAsync(lawyerId);
 
-            return lawyerContracts == null || lawyerContracts.Count == 0
-                ? NotFound() : Ok(lawyerContracts);
+            return lawyerContracts == null ? NotFound() : Ok(lawyerContracts);
         }
 
         /// <summary>
@@ -89,11 +88,11 @@ namespace LawAssistant.Api.Controllers
         /// 200 (Ok) с созданным договором.
         /// 400 (BadRequest) при ошибке.
         /// </returns>
-        [Authorize]
+        //[Authorize]
         [HttpPost("create-contract")]
 		[ProducesResponseType<CollectiveContract>(200)]
 		[ProducesResponseType(400)]
-		public async Task<IActionResult> CreateContractAsync(CreateContractRequest contractRequest)
+		public async Task<IActionResult> CreateContractAsync([FromForm] CreateContractRequest contractRequest)
         {
             var createdContract = await contractService.CreateContractAsync(contractRequest);
 
@@ -108,7 +107,7 @@ namespace LawAssistant.Api.Controllers
 		/// 200 (Ok) с измённым договором.
 		/// 400 (BadRequest) при ошибке.
 		/// </returns>
-		[Authorize]
+		//[Authorize]
         [HttpPut("update-contract")]
 		[ProducesResponseType<CollectiveContract>(200)]
 		[ProducesResponseType(400)]
@@ -127,11 +126,11 @@ namespace LawAssistant.Api.Controllers
 		/// 200 (Ok) при успешном удалении.
 		/// 400 (BadRequest) при ошибке.
 		/// </returns>
-		[Authorize]
+		//[Authorize]
         [HttpDelete("delete-contract")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
-		public async Task<IActionResult> DeleteContractAsync(int contractId)
+		public async Task<IActionResult> DeleteContractAsync([FromQuery] int contractId)
         {
             var removedContractId = await contractService.RemoveContractAsync(contractId);
 

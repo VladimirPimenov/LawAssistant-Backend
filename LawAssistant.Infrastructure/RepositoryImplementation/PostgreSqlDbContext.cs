@@ -22,6 +22,8 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 		public DbSet<ReportResult> ReportResult { get; set; }
 		public DbSet<LawyerReport> LawyerReport { get; set; }
 
+		public DbSet<Notification> Notification { get; set; }
+
 		public PostgreSqlDbContext(DbContextOptions<PostgreSqlDbContext> options) : base(options) { }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,6 +37,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 			modelBuilder.Entity<ComparisonReport>().HasKey(cre => cre.ReportId);
 			modelBuilder.Entity<ReportResult>().HasKey(rr => rr.ReportResultId);
 			modelBuilder.Entity<LawyerReport>().HasKey(lr => lr.LawyerReportId);
+			modelBuilder.Entity<Notification>().HasKey(n => n.NotificationId);
 
 			modelBuilder.Entity<CollectiveContract>()
 				.HasMany(c => c.ContractParagraphs)

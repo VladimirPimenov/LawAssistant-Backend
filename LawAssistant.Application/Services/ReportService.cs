@@ -10,7 +10,8 @@ namespace LawAssistant.Application.Services
 		IReportRepository reportRepository,
 		IContractService contractService,
 		IComparisonService comparisonService,
-		ILawDocumentsRepository lawDocumentsRepository) 
+		ILawDocumentsRepository lawDocumentsRepository,
+		INotificationService notificationService) 
 		: IReportService
 	{
 		public async Task<ReportWithResults> GetReportAsync(int reportId)
@@ -83,6 +84,9 @@ namespace LawAssistant.Application.Services
 			await comparisonService.MakeSemanticComparisonAsync(syntacticComparisonResults);
 
 			var reportWithResults = await CreateReportForFrontendAsync(createdReport);
+
+			await CreateAuthorsNotificationAsync(createdReport);
+
 			return reportWithResults;
 		}
 
@@ -183,6 +187,18 @@ namespace LawAssistant.Application.Services
 			}
 
 			return paragraphsForReport;
+		}
+
+		private async Task CreateAuthorsNotificationAsync(ComparisonReport report)
+		{
+			var reportedContract = await contractService.GetContractAsync(report.ContractId);
+
+			string notificationText = $"Создан отчёт по документу {reportedContract.Title}";
+
+			foreach (var lawyer in reportedContract.Authors)
+			{
+				await notificationService.CreateNotificationAsync(notificationText, lawyer.LawyerId);
+			}
 		}
 	}
 }

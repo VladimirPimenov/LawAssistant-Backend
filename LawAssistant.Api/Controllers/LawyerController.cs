@@ -21,7 +21,7 @@ namespace LawAssistant.Api.Controllers
         /// 200 (Ok) со списком юристов.
         /// 404 (NotFound) если ничего не найдено (проблема с БД).
         /// </returns>
-        [Authorize]
+        //[Authorize]
         [HttpGet("get-all")]
         public async Task<IActionResult> GetLawyersList()
         {
