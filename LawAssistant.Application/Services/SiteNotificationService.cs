@@ -9,8 +9,14 @@ namespace LawAssistant.Application.Services
         ILawyerService lawyerService)
         : INotificationService
     {
-        public async Task<List<Notification>> GetLawyerNotificationsAsync(int lawyerId) =>
-            await notificationRepository.GetLawyerNotificationsAsync(lawyerId);
+        public async Task<List<Notification>> GetLawyerNotificationsAsync(int lawyerId)
+        {
+            var notifications = await notificationRepository.GetLawyerNotificationsAsync(lawyerId);
+            return notifications
+                .OrderByDescending(n => n.Date)
+                .ToList();
+		}
+            
 
         public async Task<Notification> CreateNotificationAsync(string notificationText, int lawyerId)
         {
@@ -32,10 +38,7 @@ namespace LawAssistant.Application.Services
 
         public async Task<Notification> UpdateNotificationAsync(Notification notification)
         {
-            var dbNotification = await notificationRepository.GetNotificationAsync(notification.NotificationId);
-            
-            if (dbNotification.LawyerId != notification.LawyerId)
-                return null;
+            notification.Date = notification.Date.ToUniversalTime();
 
             var updatedNotification = await notificationRepository.UpdateNotificationAsync(notification);
             return updatedNotification;

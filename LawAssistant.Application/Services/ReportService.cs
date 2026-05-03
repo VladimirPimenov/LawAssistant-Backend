@@ -193,7 +193,7 @@ namespace LawAssistant.Application.Services
 		{
 			var reportedContract = await contractService.GetContractAsync(report.ContractId);
 
-			string notificationText = $"Создан отчёт по документу {reportedContract.Title}";
+			string notificationText = $"Создан отчёт по документу «{reportedContract.Title}»";
 
 			foreach (var lawyer in reportedContract.Authors)
 			{

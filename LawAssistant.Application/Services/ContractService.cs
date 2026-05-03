@@ -199,7 +199,7 @@ namespace LawAssistant.Application.Services
     
         private async Task CreateAuthorsNotificationAsync(CollectiveContract contract, List<Lawyer> lawyers)
         {
-            string notificationText = $"Загружен документ {contract.Title}";
+            string notificationText = $"Загружен документ «{contract.Title}»";
 
             foreach(var lawyer in lawyers)
             {
