@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 using LawAssistant.Application.Contracts;
-using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
 
 namespace LawAssistant.Api.Controllers

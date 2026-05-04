@@ -1,5 +1,4 @@
 ﻿using LawAssistant.Application.Contracts;
-using LawAssistant.Application.Contracts.S3;
 
 using LawAssistant.Application.Converters;
 using LawAssistant.Application.Models;

@@ -14,6 +14,7 @@
 
   <ItemGroup>
 	<PackageReference Include="DocumentFormat.OpenXml" Version="1.0.0" />
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
 	<PackageReference Include="System.IO.Packaging" Version="10.0.5" />
   </ItemGroup>
 

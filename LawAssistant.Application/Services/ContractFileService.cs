@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-using LawAssistant.Application.Contracts.S3;
+using LawAssistant.Application.Contracts;
 using LawAssistant.Domain.Repositories;
 
 namespace LawAssistant.Application.Services

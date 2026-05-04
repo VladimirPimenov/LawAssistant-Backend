@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace LawAssistant.Infrastructure.FileStorage
+namespace LawAssistant.Infrastructure.S3
 {
     internal class FormFile : IFormFile
     {

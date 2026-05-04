@@ -2,7 +2,7 @@
 using System.Text;
 using LawAssistant.Application.Contracts;
 
-namespace LawAssistant.Application.Services.Authentification
+namespace LawAssistant.Application.Services
 {
     public class SHA256HashService : IHashService
     {

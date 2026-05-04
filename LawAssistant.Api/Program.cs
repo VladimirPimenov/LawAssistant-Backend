@@ -2,19 +2,12 @@ using Microsoft.EntityFrameworkCore;
 
 using Microsoft.OpenApi;
 
-using LawAssistant.Domain.Repositories;
-using LawAssistant.Application.Contracts;
-using LawAssistant.Application.Services;
-
 using LawAssistant.Infrastructure;
-using LawAssistant.Infrastructure.FileStorage;
 using LawAssistant.Infrastructure.RepositoryImplementation;
-using LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo;
+using LawAssistant.Application;
 
 using LawAssistant.Api.Extensions;
 using LawAssistant.Api.Settings;
-using LawAssistant.Application.Services.Authentification;
-using LawAssistant.Application.Contracts.S3;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,29 +41,8 @@ builder.Services.AddDbContext<PostgreSqlDbContext>(options =>
 
 builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<ILawyerRepository, LawyerRepository>();
-builder.Services.AddScoped<IContractRepository, ContractRepository>();
-builder.Services.AddScoped<ILawDocumentsRepository, LawDocumentsRepository>();
-builder.Services.AddScoped<IReportRepository, ReportRepository>();
-builder.Services.AddScoped<IComparisonRepository, ComparisonRepository>();
-builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-
-builder.Services.AddScoped<IS3Adapter, S3MockService>();
-builder.Services.AddScoped<ISemanticModuleApiClient, SemanticModuleClient>();
-
-builder.Services.AddScoped<INotificationService, SiteNotificationService>();
-
-builder.Services.AddScoped<IHashService, SHA256HashService>();
-builder.Services.AddScoped<ITokenProvider, JwtTokenProvider>();
-builder.Services.AddScoped<IAuthentificationService, AuthentificationService>();
-
-builder.Services.AddScoped<IContractService, ContractService>();
-builder.Services.AddScoped<IContractFileService, ContractFileService>();
-builder.Services.AddScoped<IReportService, ReportService>();
-builder.Services.AddScoped<ILawyerService, LawyerService>();
-builder.Services.AddScoped<IComparisonService, ComparisonService>();
-
-builder.Services.AddScoped<IDocumentParser, WordDocumentParser>();
+builder.Services.AddApplicationLayer();
+builder.Services.AddInfrastructureLayer();
 
 builder.Services.AddJwtAuthentification(builder.Configuration);
 

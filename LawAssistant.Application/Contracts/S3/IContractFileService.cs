@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace LawAssistant.Application.Contracts.S3
+namespace LawAssistant.Application.Contracts
 {
 	public interface IContractFileService
 	{

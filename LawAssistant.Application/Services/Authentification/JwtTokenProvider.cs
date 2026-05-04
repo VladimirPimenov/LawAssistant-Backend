@@ -9,7 +9,7 @@ using LawAssistant.Application.Contracts;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Application.Settings;
 
-namespace LawAssistant.Application.Services.Authentification
+namespace LawAssistant.Application.Services
 {
     public class JwtTokenProvider : ITokenProvider
     {

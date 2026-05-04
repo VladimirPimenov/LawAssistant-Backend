@@ -4,7 +4,7 @@ using LawAssistant.Application.Models.Authentification;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
 
-namespace LawAssistant.Application.Services.Authentification
+namespace LawAssistant.Application.Services
 {
     public class AuthentificationService(
         IHashService hashService,
