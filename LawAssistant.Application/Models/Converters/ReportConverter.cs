@@ -1,8 +1,6 @@
-﻿using LawAssistant.Application.Models;
-using LawAssistant.Domain.Entities;
-using Microsoft.AspNetCore.Http;
+﻿using LawAssistant.Domain.Entities;
 
-namespace LawAssistant.Application.Converters
+namespace LawAssistant.Application.Models
 {
     public static class ReportConverter
     {

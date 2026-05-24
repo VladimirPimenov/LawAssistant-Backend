@@ -7,6 +7,8 @@
 		public string Title { get; set; }
 
 		public DateTime CreatedDate { get; set; }
+		
+		public DateTime ModifiedDate { get; set; }
 
 		public List<ContractParagraph> ContractParagraphs { get; set; }
 

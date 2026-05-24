@@ -1,4 +1,4 @@
-﻿using LawAssistant.Application.Models.Authentification;
+﻿using LawAssistant.Application.Models;
 
 namespace LawAssistant.Application.Contracts
 {

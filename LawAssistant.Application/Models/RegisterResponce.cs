@@ -1,4 +1,4 @@
-﻿namespace LawAssistant.Application.Models.Authentification
+﻿namespace LawAssistant.Application.Models
 {
 	public record RegisterResponce
 	{

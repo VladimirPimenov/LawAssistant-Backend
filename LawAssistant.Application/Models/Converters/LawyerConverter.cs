@@ -1,7 +1,6 @@
-﻿using LawAssistant.Application.Models;
-using LawAssistant.Domain.Entities;
+﻿using LawAssistant.Domain.Entities;
 
-namespace LawAssistant.Application.Converters
+namespace LawAssistant.Application.Models
 {
 	public static class LawyerConverter
 	{

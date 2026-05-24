@@ -7,6 +7,8 @@
         public string Title { get; init; }
 
         public DateTime CreatedDate { get; init; }
+        
+        public DateTime ModifiedDate { get; init; }
 
         public Guid? FileKey { get; init;  }
 

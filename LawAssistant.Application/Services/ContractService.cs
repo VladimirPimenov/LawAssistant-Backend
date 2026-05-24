@@ -1,6 +1,5 @@
 ﻿using LawAssistant.Application.Contracts;
 
-using LawAssistant.Application.Converters;
 using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
@@ -65,6 +64,7 @@ namespace LawAssistant.Application.Services
 			{
 				Title = contractRequest.Title,
 				CreatedDate = DateTime.Now.ToUniversalTime(),
+				ModifiedDate = DateTime.Now.ToUniversalTime(),
 				ContractParagraphs = new List<ContractParagraph>()
 			};
 
@@ -104,6 +104,7 @@ namespace LawAssistant.Application.Services
 
             dbContract.Title = contractDto.Title;
             dbContract.CreatedDate = dbContract.CreatedDate.ToUniversalTime();
+            dbContract.ModifiedDate = DateTime.Now.ToUniversalTime();
 
 			var updatedContract = await contractRepository.UpdateContractAsync(dbContract);
 

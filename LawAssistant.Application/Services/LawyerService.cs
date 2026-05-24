@@ -3,7 +3,6 @@ using LawAssistant.Domain.Repositories;
 
 using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
-using LawAssistant.Application.Converters;
 
 namespace LawAssistant.Application.Services
 {

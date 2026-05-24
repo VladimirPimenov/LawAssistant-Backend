@@ -1,7 +1,6 @@
-﻿using LawAssistant.Application.Models;
-using LawAssistant.Domain.Entities;
+﻿using LawAssistant.Domain.Entities;
 
-namespace LawAssistant.Application.Converters
+namespace LawAssistant.Application.Models
 {
     public static class ContractConverter
     {
@@ -12,6 +11,7 @@ namespace LawAssistant.Application.Converters
                 ContractId = contract.ContractId,
                 Title = contract.Title,
                 CreatedDate = contract.CreatedDate,
+                ModifiedDate = contract.ModifiedDate,
                 FileKey = contract.FileKey,
                 Authors = authors
             };
