@@ -9,10 +9,11 @@ namespace LawAssistant.Api.Controllers
     /// <summary>
     /// Контроллер для работы с коллективными договорами.
     /// </summary>
-    [ApiController, Route("contract")]
+    [ApiController, Route("contracts")]
     public class ContractController(
         IContractService contractService,
-        IContractFileService contractFileService)
+        IContractFileService contractFileService,
+        IReportService reportService)
         : ControllerBase
     {
         /// <summary>
@@ -24,7 +25,7 @@ namespace LawAssistant.Api.Controllers
         /// 404 (NotFound) если договор не найден.
         /// </returns>
         //[Authorize]
-        [HttpGet("get-contract")]
+        [HttpGet]
         [ProducesResponseType<CollectiveContract>(200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetContractAsync([FromQuery] int contractId)
@@ -43,8 +44,8 @@ namespace LawAssistant.Api.Controllers
         /// 404 (NotFound), если договор/файл не найден.
         /// </returns>
         //[Authorize]
-        [HttpGet("get-contract-file")]
-        public async Task<IActionResult> GetContractFileAsync([FromQuery] int contractId)
+        [HttpGet("{contractId}/file")]
+        public async Task<IActionResult> GetContractFileAsync([FromRoute] int contractId)
         {
             var file = await contractFileService.LoadContractFileAsync(contractId);
 
@@ -60,25 +61,6 @@ namespace LawAssistant.Api.Controllers
 		}
 
         /// <summary>
-        /// Получает договоры юриста по его идентификатору.
-        /// </summary>
-        /// <param name="lawyerId">Идентификатор юриста</param>
-        /// <returns>
-        /// 200 (Ok) со списком договоров.
-        /// 404 (NotFound) если договоры не найдены.
-        /// </returns>
-        //[Authorize]
-        [HttpGet("get-lawyer-contracts")]
-        [ProducesResponseType<List<ContractDto>>(200)]
-		[ProducesResponseType(404)]
-		public async Task<IActionResult> GetLawyerContracts([FromQuery] int lawyerId)
-        {
-            var lawyerContracts = await contractService.GetLawyerContractsInfoAsync(lawyerId);
-
-            return lawyerContracts == null ? NotFound() : Ok(lawyerContracts);
-        }
-
-        /// <summary>
         /// Создаёт договор.
         /// </summary>
         /// <param name="contractRequest">Запрос на создание договора.</param>
@@ -87,7 +69,7 @@ namespace LawAssistant.Api.Controllers
         /// 400 (BadRequest) при ошибке.
         /// </returns>
         //[Authorize]
-        [HttpPost("create-contract")]
+        [HttpPost]
 		[ProducesResponseType<CollectiveContract>(200)]
 		[ProducesResponseType(400)]
 		public async Task<IActionResult> CreateContractAsync([FromForm] CreateContractRequest contractRequest)
@@ -106,7 +88,7 @@ namespace LawAssistant.Api.Controllers
 		/// 400 (BadRequest) при ошибке.
 		/// </returns>
 		//[Authorize]
-        [HttpPut("update-contract")]
+        [HttpPut]
 		[ProducesResponseType<CollectiveContract>(200)]
 		[ProducesResponseType(400)]
 		public async Task<IActionResult> UpdateContractAsync(ContractDto contractDto)
@@ -125,7 +107,7 @@ namespace LawAssistant.Api.Controllers
 		/// 400 (BadRequest) при ошибке.
 		/// </returns>
 		//[Authorize]
-        [HttpDelete("delete-contract")]
+        [HttpDelete]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
 		public async Task<IActionResult> DeleteContractAsync([FromQuery] int contractId)
@@ -134,5 +116,21 @@ namespace LawAssistant.Api.Controllers
 
             return removedContractId == null ? BadRequest() : Ok();
         }
+        
+        /// <summary>
+        /// Получает отчёты для договора
+        /// </summary>
+        /// <param name="contractId">Идентификатор договора</param>
+        /// <returns>Список отчётов</returns>
+        //[Authorize]
+        [HttpGet("{contractId}/reports")]
+		[ProducesResponseType<ComparisonReport>(200)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> GetContractReportsAsync([FromRoute] int contractId)
+		{
+			var reports = await reportService.GetContractReportsAsync(contractId);
+
+			return reports == null ? NotFound() : Ok(reports);
+		}
     }
 }

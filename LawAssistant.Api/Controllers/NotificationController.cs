@@ -5,22 +5,13 @@ using LawAssistant.Domain.Entities;
 
 namespace LawAssistant.Api.Controllers
 {
-    [ApiController, Route("notification")]
+    [ApiController, Route("notifications")]
     public class NotificationController(
         INotificationService notificationService)
         : ControllerBase
     {
         //[Authorize]
-        [HttpGet("get-lawyer-notifications")]
-        public async Task<IActionResult> GetLawyerNotificationsAsync(int lawyerId)
-        {
-            var notifications = await notificationService.GetLawyerNotificationsAsync(lawyerId);
-
-            return notifications == null ? BadRequest() : Ok(notifications);
-        }
-
-        //[Authorize]
-        [HttpPut("update-notification")]
+        [HttpPut]
         public async Task<IActionResult> UpdateNotificationAsync(Notification notification)
         {
             var updatedNotification = await notificationService.UpdateNotificationAsync(notification);
@@ -29,7 +20,7 @@ namespace LawAssistant.Api.Controllers
         }
 
         //[Authorize]
-        [HttpDelete("remove-notification")]
+        [HttpDelete]
         public async Task<IActionResult> RemoveNotificationAsync(int notificationId)
         {
             var removedNotificationId = await notificationService.RemoveNotificationAsync(notificationId);

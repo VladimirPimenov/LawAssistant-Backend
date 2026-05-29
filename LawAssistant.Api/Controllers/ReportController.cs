@@ -9,7 +9,7 @@ namespace LawAssistant.Api.Controllers
 	/// <summary>
 	/// Контроллер для формирования отчётов о сопоставлении договора со статьями законодательных актов.
 	/// </summary>
-	[ApiController, Route("report")]
+	[ApiController, Route("reports")]
 	public class ReportController(
 		IReportService reportService)
 		: ControllerBase
@@ -23,7 +23,7 @@ namespace LawAssistant.Api.Controllers
 		/// 404 (NotFound) если отчёт не найден.
 		/// </returns>
 		//[Authorize]
-		[HttpGet("get-report")]
+		[HttpGet]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(404)]
 		public async Task<IActionResult> GetReportAsync([FromQuery] int reportId)
@@ -31,26 +31,6 @@ namespace LawAssistant.Api.Controllers
 			var report = await reportService.GetReportAsync(reportId);
 
 			return report == null ? NotFound() : Ok(report);
-		}
-
-		[HttpGet("get-lawyer-reports")]
-		[ProducesResponseType<ComparisonReport>(200)]
-		[ProducesResponseType(404)]
-		public async Task<IActionResult> GetLawyerReportsAsync([FromQuery] int lawyerId)
-		{
-			var reports = await reportService.GetLawyerReportsAsync(lawyerId);
-
-			return reports == null ? NotFound() : Ok(reports);
-		}
-
-		[HttpGet("get-contract-reports")]
-		[ProducesResponseType<ComparisonReport>(200)]
-		[ProducesResponseType(404)]
-		public async Task<IActionResult> GetContractReportsAsync([FromQuery] int contractId)
-		{
-			var reports = await reportService.GetContractReportsAsync(contractId);
-
-			return reports == null ? NotFound() : Ok(reports);
 		}
 
 		/// <summary>
@@ -62,7 +42,7 @@ namespace LawAssistant.Api.Controllers
 		/// 400 (BadRequest) при ошибке.
 		/// </returns>
 		//[Authorize]
-		[HttpPost("create-report")]
+		[HttpPost]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(400)]
 		public async Task<IActionResult> CreateReportForContractAsync([FromQuery] int contractId)
@@ -73,7 +53,7 @@ namespace LawAssistant.Api.Controllers
 		}
 
 		//[Authorize]
-		[HttpDelete("remove-report")]
+		[HttpDelete]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(400)]
 		public async Task<IActionResult> RemoveReportAsync([FromQuery] int reportId)
