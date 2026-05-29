@@ -5,11 +5,20 @@ using LawAssistant.Domain.Entities;
 
 namespace LawAssistant.Api.Controllers
 {
+    /// <summary>
+    /// Контроллер для работы с уведомлениями
+    /// </summary>
+    /// <param name="notificationService"></param>
     [ApiController, Route("notifications")]
     public class NotificationController(
         INotificationService notificationService)
         : ControllerBase
     {
+        /// <summary>
+        /// Изменяет данные уведомления
+        /// </summary>
+        /// <param name="notification">Уведомление с обновлёнными полями</param>
+        /// <returns>Изменённое уведомление</returns>
         //[Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateNotificationAsync(Notification notification)
@@ -19,6 +28,11 @@ namespace LawAssistant.Api.Controllers
             return updatedNotification == null ? BadRequest() : Ok(updatedNotification);
         }
 
+        /// <summary>
+        /// Удаляет уведомление
+        /// </summary>
+        /// <param name="notificationId">Идентификатор уведомления</param>
+        /// <returns>Идентификатор удалённого уведомления</returns>
         //[Authorize]
         [HttpDelete]
         public async Task<IActionResult> RemoveNotificationAsync(int notificationId)

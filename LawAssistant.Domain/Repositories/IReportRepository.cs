@@ -2,6 +2,9 @@
 
 namespace LawAssistant.Domain.Repositories
 {
+	/// <summary>
+	/// Репозиторий для работы с отчётами о сопоставлении договора с законодательными актами
+	/// </summary>
 	public interface IReportRepository
 	{
 		public Task<ComparisonReport> GetReportAsync(int reportId);

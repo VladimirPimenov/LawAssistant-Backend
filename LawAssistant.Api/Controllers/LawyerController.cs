@@ -19,12 +19,9 @@ namespace LawAssistant.Api.Controllers
         : ControllerBase
     {
         /// <summary>
-        /// Получает список всех юристов.
+        /// Возращает список всех юристов
         /// </summary>
-        /// <returns>
-        /// 200 (Ok) со списком юристов.
-        /// 404 (NotFound) если ничего не найдено (проблема с БД).
-        /// </returns>
+        /// <returns>Список юристов</returns>
         //[Authorize]
         [HttpGet]
         public async Task<IActionResult> GetLawyersList()
@@ -34,13 +31,10 @@ namespace LawAssistant.Api.Controllers
             return lawyers == null ? NotFound() : Ok(lawyers);
         }
         /// <summary>
-        /// Изменяет имя и фамилию юриста.
+        /// Изменяет данные учётной записи юриста
         /// </summary>
         /// <param name="lawyer">Обновлённые данные юриста</param>
-        /// <returns>
-        /// 200 (Ок) с обновлённым юристом.
-        /// 400 (BadRequest) при ошибке.
-        /// </returns>
+        /// <returns>Изменённая модель юриста</returns>
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateLawyerInfoAsync(LawyerDto lawyer)
@@ -51,13 +45,10 @@ namespace LawAssistant.Api.Controllers
         }
         
         /// <summary>
-        /// Получает договоры юриста по его идентификатору.
+        /// Возвращает договоры юриста
         /// </summary>
         /// <param name="lawyerId">Идентификатор юриста</param>
-        /// <returns>
-        /// 200 (Ok) со списком договоров.
-        /// 404 (NotFound) если договоры не найдены.
-        /// </returns>
+        /// <returns>Список договоров</returns>
         //[Authorize]
         [HttpGet("{lawyerId}/contracts")]
         [ProducesResponseType<List<ContractDto>>(200)]
@@ -69,6 +60,11 @@ namespace LawAssistant.Api.Controllers
             return lawyerContracts == null ? NotFound() : Ok(lawyerContracts);
         }
         
+        /// <summary>
+        /// Возвращает отчёты юриста
+        /// </summary>
+        /// <param name="lawyerId">Идентификатор юриста</param>
+        /// <returns>Список отчётов</returns>
         //[Authorize]
         [HttpGet("{lawyerId}/reports")]
 		[ProducesResponseType<ComparisonReport>(200)]
@@ -80,6 +76,11 @@ namespace LawAssistant.Api.Controllers
 			return reports == null ? NotFound() : Ok(reports);
 		}
         
+        /// <summary>
+        /// Возвращает уведомления юриста
+        /// </summary>
+        /// <param name="lawyerId">Идентификатор юриста</param>
+        /// <returns>Список уведомлений</returns>
         //[Authorize]
         [HttpGet("{lawyerId}/notifications")]
         public async Task<IActionResult> GetLawyerNotificationsAsync([FromRoute] int lawyerId)

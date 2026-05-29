@@ -2,6 +2,9 @@
 
 namespace LawAssistant.Domain.Repositories
 {
+    /// <summary>
+    /// Интерфейс репозитория для выполнения синтаксического сопоставления (FTS) и работы с его результатами
+    /// </summary>
     public interface IComparisonRepository
     {
         public Task<ComparisonResult> GetComparisonResultAsync(int resultId);

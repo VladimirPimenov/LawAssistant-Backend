@@ -7,7 +7,7 @@ using LawAssistant.Domain.Entities;
 namespace LawAssistant.Api.Controllers
 {
     /// <summary>
-    /// Контроллер для работы с коллективными договорами.
+    /// Контроллер для работы с коллективными договорами
     /// </summary>
     [ApiController, Route("contracts")]
     public class ContractController(
@@ -17,13 +17,10 @@ namespace LawAssistant.Api.Controllers
         : ControllerBase
     {
         /// <summary>
-        /// Получает договор по идентификатору.
+        /// Возвращает договор по идентификатору.
         /// </summary>
         /// <param name="contractId">Идентификатор договора</param>
-        /// <returns>
-        /// 200 (Ок) с найденным договором.
-        /// 404 (NotFound) если договор не найден.
-        /// </returns>
+        /// <returns>Найденный договор</returns>
         //[Authorize]
         [HttpGet]
         [ProducesResponseType<CollectiveContract>(200)]
@@ -36,13 +33,10 @@ namespace LawAssistant.Api.Controllers
         }
 
         /// <summary>
-        /// Получает файл договора по его идентификатору.
+        /// Возвращает файл договора по его идентификатору
         /// </summary>
         /// <param name="contactId">Идентификатор договора</param>
-        /// <returns>
-        /// Файл договора.
-        /// 404 (NotFound), если договор/файл не найден.
-        /// </returns>
+        /// <returns>Файл договора</returns>
         //[Authorize]
         [HttpGet("{contractId}/file")]
         public async Task<IActionResult> GetContractFileAsync([FromRoute] int contractId)
@@ -61,13 +55,10 @@ namespace LawAssistant.Api.Controllers
 		}
 
         /// <summary>
-        /// Создаёт договор.
+        /// Создаёт договор
         /// </summary>
-        /// <param name="contractRequest">Запрос на создание договора.</param>
-        /// <returns>
-        /// 200 (Ok) с созданным договором.
-        /// 400 (BadRequest) при ошибке.
-        /// </returns>
+        /// <param name="contractRequest">Запрос на создание договора</param>
+        /// <returns>Созданный договор</returns>
         //[Authorize]
         [HttpPost]
 		[ProducesResponseType<CollectiveContract>(200)]
@@ -80,13 +71,10 @@ namespace LawAssistant.Api.Controllers
         }
 
 		/// <summary>
-		/// Изменяет существующий договор.
+		/// Изменяет данные существующего договора
 		/// </summary>
-		/// <param name="contractDto">Изменённый договор.</param>
-		/// <returns>
-		/// 200 (Ok) с измённым договором.
-		/// 400 (BadRequest) при ошибке.
-		/// </returns>
+		/// <param name="contractDto">Договор с обновлёнными полями</param>
+		/// <returns>Изменённый договор</returns>
 		//[Authorize]
         [HttpPut]
 		[ProducesResponseType<CollectiveContract>(200)]
@@ -99,13 +87,10 @@ namespace LawAssistant.Api.Controllers
         }
 
 		/// <summary>
-		/// Удаляет существующий договор.
+		/// Удаляет существующий договор
 		/// </summary>
-		/// <param name="contractId">Идентификатор договора.</param>
-		/// <returns>
-		/// 200 (Ok) при успешном удалении.
-		/// 400 (BadRequest) при ошибке.
-		/// </returns>
+		/// <param name="contractId">Идентификатор договора</param>
+		/// <returns>Идентификатор удалённого договора</returns>
 		//[Authorize]
         [HttpDelete]
 		[ProducesResponseType(200)]
@@ -118,7 +103,7 @@ namespace LawAssistant.Api.Controllers
         }
         
         /// <summary>
-        /// Получает отчёты для договора
+        /// Возвращает отчёты для договора
         /// </summary>
         /// <param name="contractId">Идентификатор договора</param>
         /// <returns>Список отчётов</returns>

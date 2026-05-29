@@ -6,7 +6,7 @@ using LawAssistant.Application.Models;
 namespace LawAssistant.Api.Controllers
 {
     /// <summary>
-    /// Контроллер для аутентификации пользователей.
+    /// Контроллер для аутентификации пользователей
     /// </summary>
     [ApiController, Route("auth")]
     public class AuthentificationController(
@@ -14,13 +14,10 @@ namespace LawAssistant.Api.Controllers
         : ControllerBase
     {
         /// <summary>
-        /// Выполняет регистрацию пользователя.
+        /// Выполняет регистрацию пользователя
         /// </summary>
         /// <param name="registerRequest">Запрос на регистрацию</param>
-        /// <returns>
-        /// 200 (Ok) с ответом о регистрации.
-        /// 400 (BadRequest) при ошибке.
-        /// </returns>
+        /// <returns>Ответ с данными зарегистрированного пользователя</returns>
         [HttpPost("register")]
         [ProducesResponseType<RegisterResponce>(200)]
         [ProducesResponseType(400)]
@@ -32,13 +29,10 @@ namespace LawAssistant.Api.Controllers
         }
 
         /// <summary>
-        /// Выполняет аутентификацию пользователя по логину и паролю.
+        /// Выполняет аутентификацию пользователя по логину и паролю
         /// </summary>
         /// <param name="loginRequest">Запрос на вход (логин и пароль)</param>
-        /// <returns>
-        /// 200 (Ok) с токеном.
-        /// 401 (Unauthorized) при неверных данных.
-        /// </returns>
+        /// <returns>Токен аутентификации</returns>
         [HttpPost("login")]
 		[ProducesResponseType<string>(200)]
 		[ProducesResponseType(401)]
@@ -56,7 +50,7 @@ namespace LawAssistant.Api.Controllers
         }
 
         /// <summary>
-        /// Выполняет выход.
+        /// Выполняет выход из учётной записи
         /// </summary>
         [HttpPost("logout")]
 		[ProducesResponseType(200)]

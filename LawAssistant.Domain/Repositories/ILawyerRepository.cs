@@ -2,6 +2,9 @@
 
 namespace LawAssistant.Domain.Repositories
 {
+	/// <summary>
+	/// Репозиторий для работы с юристами
+	/// </summary>
 	public interface ILawyerRepository
 	{
 		public Task<Lawyer> GetLawyerAsync(int lawyerId);

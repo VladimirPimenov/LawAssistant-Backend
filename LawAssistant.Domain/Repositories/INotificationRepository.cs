@@ -2,6 +2,9 @@
 
 namespace LawAssistant.Domain.Repositories
 {
+    /// <summary>
+    /// Интерфейс для работы с уведомлениями
+    /// </summary>
     public interface INotificationRepository
     {
         public Task<Notification> GetNotificationAsync(int notificationId);

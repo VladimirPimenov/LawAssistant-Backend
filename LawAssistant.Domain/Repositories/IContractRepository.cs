@@ -2,6 +2,9 @@
 
 namespace LawAssistant.Domain.Repositories
 {
+	/// <summary>
+	/// Репозиторий для работы с коллективными договорами
+	/// </summary>
 	public interface IContractRepository
 	{
 		public Task<CollectiveContract> GetContractAsync(int contractId);

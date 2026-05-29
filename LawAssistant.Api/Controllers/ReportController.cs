@@ -7,7 +7,7 @@ using LawAssistant.Domain.Entities;
 namespace LawAssistant.Api.Controllers
 {
 	/// <summary>
-	/// Контроллер для формирования отчётов о сопоставлении договора со статьями законодательных актов.
+	/// Контроллер для работы с отчётами
 	/// </summary>
 	[ApiController, Route("reports")]
 	public class ReportController(
@@ -15,13 +15,10 @@ namespace LawAssistant.Api.Controllers
 		: ControllerBase
 	{
 		/// <summary>
-		/// Получает отчёт по идентификатору
+		/// Возвращает отчёт
 		/// </summary>
 		/// <param name="reportId">Идентификатор отчёта</param>
-		/// <returns>
-		/// 200 (Ok) с найденным отчётом.
-		/// 404 (NotFound) если отчёт не найден.
-		/// </returns>
+		/// <returns>Найденный отчёт</returns>
 		//[Authorize]
 		[HttpGet]
 		[ProducesResponseType<ComparisonReport>(200)]
@@ -34,13 +31,10 @@ namespace LawAssistant.Api.Controllers
 		}
 
 		/// <summary>
-		/// Создаёт отчёт о сопоставлении существующего договора
+		/// Создаёт отчёт о сопоставлении существующего договора со статьями законодательства
 		/// </summary>
 		/// <param name="contractId">Идентификатор договора</param>
-		/// <returns>
-		/// 200 (Ok) с созданным отчётом.
-		/// 400 (BadRequest) при ошибке.
-		/// </returns>
+		/// <returns>Созданный отчёт</returns>
 		//[Authorize]
 		[HttpPost]
 		[ProducesResponseType<ComparisonReport>(200)]
@@ -52,6 +46,11 @@ namespace LawAssistant.Api.Controllers
 			return createdReport == null ? BadRequest() : Ok(createdReport);
 		}
 
+		/// <summary>
+		/// Удаляет отчёт
+		/// </summary>
+		/// <param name="reportId">Идентификатор отчёта</param>
+		/// <returns>Идентификатор удалённого отчёта</returns>
 		//[Authorize]
 		[HttpDelete]
 		[ProducesResponseType<ComparisonReport>(200)]

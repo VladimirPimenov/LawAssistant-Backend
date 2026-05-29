@@ -2,6 +2,9 @@
 
 namespace LawAssistant.Domain.Repositories
 {
+	/// <summary>
+	/// Репозиторий для работы с законодательными актами
+	/// </summary>
 	public interface ILawDocumentsRepository
 	{
 		public Task<LawAct> GetLawActAsync(int actId);
