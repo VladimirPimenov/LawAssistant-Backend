@@ -9,7 +9,7 @@ using LawAssistant.Infrastructure.Settings;
 
 namespace LawAssistant.Infrastructure
 {
-	public class SemanticModuleClient(
+	internal class SemanticModuleClient(
 		IConfiguration config,
 		IHttpClientFactory httpClientFactory
 		) : ISemanticModuleApiClient

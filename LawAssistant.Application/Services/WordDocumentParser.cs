@@ -6,7 +6,7 @@ using LawAssistant.Application.Contracts;
 
 namespace LawAssistant.Application.Services
 {
-    public class WordDocumentParser : IDocumentParser
+	internal class WordDocumentParser : IDocumentParser
     {
         public List<string> ParseDocumentIntoParagraphs(IFormFile documentFile)
         {

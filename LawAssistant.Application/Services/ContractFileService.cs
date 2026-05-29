@@ -5,7 +5,7 @@ using LawAssistant.Domain.Repositories;
 
 namespace LawAssistant.Application.Services
 {
-	public class ContractFileService(
+	internal class ContractFileService(
 		IS3Adapter s3Adapter,
 		IContractRepository contractRepository)
 		: IContractFileService

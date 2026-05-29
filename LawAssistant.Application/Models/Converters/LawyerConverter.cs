@@ -2,7 +2,7 @@
 
 namespace LawAssistant.Application.Models
 {
-	public static class LawyerConverter
+	internal static class LawyerConverter
 	{
 		public static LawyerDto ConvertToDto(this Lawyer lawyer)
 		{

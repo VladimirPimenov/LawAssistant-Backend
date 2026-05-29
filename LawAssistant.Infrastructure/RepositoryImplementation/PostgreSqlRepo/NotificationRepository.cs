@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {
-    public class NotificationRepository(
+	internal class NotificationRepository(
         PostgreSqlDbContext dbContext)
         : INotificationRepository
     {

@@ -1,6 +1,6 @@
 ﻿namespace LawAssistant.Infrastructure.RepositoryImplementation.Models
 {
-    public record LawyerReport
+	internal record LawyerReport
     {
         public int LawyerReportId { get; init; }
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {
-    public class ReportRepository(
+	internal class ReportRepository(
         PostgreSqlDbContext dbContext)
         : IReportRepository
     {

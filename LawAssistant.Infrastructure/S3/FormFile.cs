@@ -2,7 +2,7 @@
 
 namespace LawAssistant.Infrastructure.S3
 {
-    internal class FormFile : IFormFile
+	internal class FormFile : IFormFile
     {
         public string Name { get; }
 

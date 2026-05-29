@@ -4,7 +4,7 @@ using LawAssistant.Domain.Repositories;
 
 namespace LawAssistant.Application.Services
 {
-    public class ComparisonService(
+    internal class ComparisonService(
         IComparisonRepository comparisonRepository,
         ILawDocumentsRepository lawDocsRepository,
         ISemanticModuleApiClient semanticModule) 

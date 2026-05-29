@@ -1,6 +1,6 @@
 ﻿namespace LawAssistant.Infrastructure.RepositoryImplementation.Models
 {
-    public class LawyerContract
+	internal class LawyerContract
     {
         public int LawyerContractId { get; set; }
 

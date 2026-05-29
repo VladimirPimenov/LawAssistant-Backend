@@ -6,7 +6,7 @@ using LawAssistant.Domain.Entities;
 
 namespace LawAssistant.Application.Services
 {
-    public class LawyerService(
+	internal class LawyerService(
         ILawyerRepository lawyerRepository)
         : ILawyerService
     {

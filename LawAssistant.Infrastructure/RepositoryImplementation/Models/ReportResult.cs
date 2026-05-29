@@ -1,8 +1,6 @@
-﻿using LawAssistant.Domain.Entities;
-
-namespace LawAssistant.Infrastructure.RepositoryImplementation.Models
+﻿namespace LawAssistant.Infrastructure.RepositoryImplementation.Models
 {
-	public record ReportResult
+	internal record ReportResult
 	{
 		public int ReportResultId { get; init; }
 

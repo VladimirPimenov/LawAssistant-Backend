@@ -1,4 +1,4 @@
-﻿namespace LawAssistant.Api.Settings
+﻿namespace LawAssistant.Infrastructure.Settings
 {
     public class DbConfiguration
     {

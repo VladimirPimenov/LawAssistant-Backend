@@ -6,7 +6,7 @@ using LawAssistant.Infrastructure.RepositoryImplementation.Models;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {
-	public class ContractRepository(
+	internal class ContractRepository(
 		PostgreSqlDbContext dbContext)
 		: IContractRepository
 	{

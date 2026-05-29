@@ -4,7 +4,7 @@ using LawAssistant.Domain.Repositories;
 
 namespace LawAssistant.Application.Services
 {
-    public class SiteNotificationService(
+	internal class SiteNotificationService(
         INotificationRepository notificationRepository,
         ILawyerService lawyerService)
         : INotificationService

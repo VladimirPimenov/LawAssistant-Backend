@@ -2,7 +2,7 @@
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {
-	public static class FullTextSeachHelper
+	internal static class FullTextSeachHelper
 	{
 		private static readonly string _compareFunctionName = "\"CompareParagraphWithArticle\"";
 

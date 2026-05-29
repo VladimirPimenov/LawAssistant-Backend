@@ -2,7 +2,7 @@
 
 namespace LawAssistant.Application.Models
 {
-    public static class ReportConverter
+	internal static class ReportConverter
     {
         public static ReportDto ConvertToDto(this ComparisonReport report, ContractDto contract)
         {

@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using LawAssistant.Api.Settings;
+
+using LawAssistant.Infrastructure.Settings;
 using LawAssistant.Application.Contracts;
 
 namespace LawAssistant.Infrastructure.S3
 {
-    public class S3MockService : IS3Adapter
+	internal class S3MockService : IS3Adapter
     {
         private readonly S3Configuration s3Config;
 

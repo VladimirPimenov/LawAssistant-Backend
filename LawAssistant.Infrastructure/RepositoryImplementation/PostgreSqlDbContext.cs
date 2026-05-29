@@ -6,7 +6,7 @@ using LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation
 {
-	public class PostgreSqlDbContext: DbContext
+	internal class PostgreSqlDbContext: DbContext
 	{
 		public DbSet<Lawyer> Lawyer { get; set; }
 

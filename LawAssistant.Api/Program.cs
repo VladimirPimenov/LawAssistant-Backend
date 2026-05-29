@@ -3,11 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 
 using LawAssistant.Infrastructure;
-using LawAssistant.Infrastructure.RepositoryImplementation;
 using LawAssistant.Application;
 
 using LawAssistant.Api.Extensions;
-using LawAssistant.Api.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,16 +31,10 @@ builder.Services.AddCors(options =>
 	});
 });
 
-builder.Services.AddDbContext<PostgreSqlDbContext>(options =>
-	options.UseNpgsql(
-		builder.Configuration
-		.GetSection(nameof(DbConfiguration))
-		.Get<DbConfiguration>().PostreSqlConnectionString));
-
 builder.Services.AddHttpClient();
 
 builder.Services.AddApplicationLayer();
-builder.Services.AddInfrastructureLayer();
+builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 builder.Services.AddJwtAuthentification(builder.Configuration);
 

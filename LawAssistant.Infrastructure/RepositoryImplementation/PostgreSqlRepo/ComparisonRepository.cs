@@ -5,7 +5,7 @@ using LawAssistant.Domain.Repositories;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {
-    public class ComparisonRepository(
+	internal class ComparisonRepository(
         PostgreSqlDbContext dbContext)
         : IComparisonRepository
     {

@@ -6,7 +6,7 @@ using LawAssistant.Domain.Repositories;
 
 namespace LawAssistant.Application.Services
 {
-    public class ContractService(
+	internal class ContractService(
         IContractRepository contractRepository,
         ILawyerService lawyerService,
         IContractFileService fileService,

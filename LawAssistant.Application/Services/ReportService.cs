@@ -5,7 +5,7 @@ using LawAssistant.Domain.Repositories;
 
 namespace LawAssistant.Application.Services
 {
-	public class ReportService(
+	internal class ReportService(
 		IReportRepository reportRepository,
 		IContractService contractService,
 		IComparisonService comparisonService,

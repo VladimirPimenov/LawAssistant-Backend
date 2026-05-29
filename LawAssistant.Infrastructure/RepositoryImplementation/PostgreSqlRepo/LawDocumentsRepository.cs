@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 {
-	public class LawDocumentsRepository(
+	internal class LawDocumentsRepository(
 		PostgreSqlDbContext dbContext)
 		: ILawDocumentsRepository
 	{
