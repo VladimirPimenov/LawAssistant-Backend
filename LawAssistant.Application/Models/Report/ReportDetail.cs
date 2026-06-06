@@ -1,6 +1,6 @@
 ﻿namespace LawAssistant.Application.Models
 {
-    public record ReportWithResults
+    public record ReportDetail
     {
         public int ReportId { get; init; }
 
@@ -8,6 +8,6 @@
 
         public int ContractId { get; init; }
 
-        public List<ReportParagraph> Results { get; init; }
+        public List<ParagraphMatches> Results { get; init; }
     }
 }

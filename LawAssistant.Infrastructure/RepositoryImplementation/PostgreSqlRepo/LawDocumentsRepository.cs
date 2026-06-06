@@ -20,11 +20,9 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 			return await dbContext.ActArticle.FindAsync(articleId);
 		}
 
-		public async Task<LawAct> GetLawActAsync(int actId)
+		public async Task<LawAct> GetActAsync(int actId)
 		{
-			return await dbContext.LawAct
-				.Include(act => act.Articles)
-				.FirstOrDefaultAsync(act => act.ActId == actId);
+			return await dbContext.LawAct.FindAsync(actId);
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace LawAssistant.Application.Contracts
 		/// </summary>
 		/// <param name="reportId">Идентификатор отчёта</param>
 		/// <returns>Найденный отчёт</returns>
-		public Task<ReportWithResults> GetReportAsync(int reportId);
+		public Task<ReportDetail> GetReportAsync(int reportId);
 
 		/// <summary>
 		/// Возвращает список отчётов по договору
@@ -34,7 +34,7 @@ namespace LawAssistant.Application.Contracts
 		/// </summary>
 		/// <param name="contractId">Идентификатор договора, для которого формируется отчёт</param>
 		/// <returns>Созданный отчёт</returns>
-		public Task<ReportWithResults> CreateReportAsync(int contractId);
+		public Task<ReportDetail> CreateReportAsync(int contractId);
 
 		/// <summary>
 		/// Удаляет отчёт

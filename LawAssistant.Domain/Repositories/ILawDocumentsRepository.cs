@@ -7,7 +7,7 @@ namespace LawAssistant.Domain.Repositories
 	/// </summary>
 	public interface ILawDocumentsRepository
 	{
-		public Task<LawAct> GetLawActAsync(int actId);
+		public Task<LawAct> GetActAsync(int actId);
 
 		public Task<ActArticle> GetArticleAsync(int articleId);
 

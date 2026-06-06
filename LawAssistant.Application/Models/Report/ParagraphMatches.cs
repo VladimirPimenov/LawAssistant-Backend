@@ -2,10 +2,10 @@
 
 namespace LawAssistant.Application.Models
 {
-    public record ReportParagraph
+    public record ParagraphMatches
     {
         public ContractParagraph Paragraph { get; init; }
 
-        public List<ResultDto> ComparisonResults { get; init; }
+        public List<ArticleMatch> ComparisonResults { get; init; }
     }
 }

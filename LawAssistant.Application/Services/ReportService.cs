@@ -13,13 +13,13 @@ namespace LawAssistant.Application.Services
 		INotificationService notificationService) 
 		: IReportService
 	{
-		public async Task<ReportWithResults> GetReportAsync(int reportId)
+		public async Task<ReportDetail> GetReportAsync(int reportId)
 		{
 			var report = await reportRepository.GetReportAsync(reportId);
 			if (report == null)
 				return null;
 
-			var reportWithResults = await CreateReportForFrontendAsync(report);
+			var reportWithResults = await GetDetaliedReport(report);
 			
 			return reportWithResults;
 		}
@@ -56,7 +56,7 @@ namespace LawAssistant.Application.Services
 			return reportsDto;
 		}
 
-		public async Task<ReportWithResults> CreateReportAsync(int contractId)
+		public async Task<ReportDetail> CreateReportAsync(int contractId)
 		{
 			var contract = await contractService.GetContractWithParagraphsAsync(contractId);
 			if (contract == null)
@@ -82,11 +82,9 @@ namespace LawAssistant.Application.Services
 
 			await comparisonService.MakeSemanticComparisonAsync(syntacticComparisonResults);
 
-			var reportWithResults = await CreateReportForFrontendAsync(createdReport);
-
 			await CreateAuthorsNotificationAsync(createdReport);
-
-			return reportWithResults;
+			
+			return await GetDetaliedReport(createdReport);
 		}
 
 		public async Task<int?> RemoveReportAsync(int reportId)
@@ -137,55 +135,10 @@ namespace LawAssistant.Application.Services
 			await Task.CompletedTask;
 		}
 
-		private async Task<ReportWithResults> CreateReportForFrontendAsync(ComparisonReport report)
+		private async Task<ReportDetail> GetDetaliedReport(ComparisonReport report)
 		{
 			var comparisonResults = await reportRepository.GetReportResultsAsync(report);
-			var paragraphsForReport = await GetParagraphsForReportAsync(comparisonResults);
-
-			return report.CreateReportForView(paragraphsForReport);
-		}
-
-		private async Task<List<ReportParagraph>> GetParagraphsForReportAsync(List<ComparisonResult> results)
-		{
-			var paragraphsForReport = new List<ReportParagraph>();
-			var paragraphs = results
-				.Select(rr => rr.ContractParagraph)
-				.Distinct()
-				.OrderBy(p => p.ParagraphId)
-				.ToList();
-
-			foreach(var paragraph in paragraphs)
-			{
-				var resultsForParagraph = new List<ResultDto>();
-
-				var paragraphResults = results
-					.Where(rr => rr.ParagraphId == paragraph.ParagraphId)
-					.ToList();
-
-				foreach(var paragraphResult in paragraphResults)
-				{
-					var resultDto = new ResultDto
-					{
-						ResultId = paragraphResult.ResultId,
-						Text = paragraphResult.Text,
-						MatchValue = paragraphResult.MatchValue,
-						Article = await lawDocumentsRepository.GetArticleAsync(paragraphResult.ArticleId)
-					};
-
-					resultsForParagraph.Add(resultDto);
-				}
-
-				var reportParagraph = new ReportParagraph
-				{
-					Paragraph = paragraph,
-					ComparisonResults = resultsForParagraph
-						.OrderByDescending(cr => cr.MatchValue)
-						.ToList()
-				};
-				paragraphsForReport.Add(reportParagraph);
-			}
-
-			return paragraphsForReport;
+			return await ReportConverter.CreateDetailedReport(report, comparisonResults, lawDocumentsRepository);
 		}
 
 		private async Task CreateAuthorsNotificationAsync(ComparisonReport report)
