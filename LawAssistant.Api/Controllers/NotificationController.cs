@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using LawAssistant.Application.Contracts;
 using LawAssistant.Domain.Entities;
@@ -19,7 +20,7 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="notification">Уведомление с обновлёнными полями</param>
         /// <returns>Изменённое уведомление</returns>
-        //[Authorize]
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateNotificationAsync(Notification notification)
         {
@@ -33,7 +34,7 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="notificationId">Идентификатор уведомления</param>
         /// <returns>Идентификатор удалённого уведомления</returns>
-        //[Authorize]
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> RemoveNotificationAsync(int notificationId)
         {

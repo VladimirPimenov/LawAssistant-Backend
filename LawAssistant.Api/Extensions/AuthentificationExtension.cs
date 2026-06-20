@@ -34,6 +34,7 @@ namespace LawAssistant.Api.Extensions
                         }
                     };
                 });
+            services.AddAuthorization();
         }
     }
 }

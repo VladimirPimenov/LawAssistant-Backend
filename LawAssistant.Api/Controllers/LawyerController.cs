@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using LawAssistant.Application.Contracts;
 using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
+using LawAssistant.Api.Extensions;
 
 namespace LawAssistant.Api.Controllers
 {
@@ -22,7 +23,7 @@ namespace LawAssistant.Api.Controllers
         /// Возращает список всех юристов
         /// </summary>
         /// <returns>Список юристов</returns>
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetLawyersList()
         {
@@ -39,6 +40,10 @@ namespace LawAssistant.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateLawyerInfoAsync(LawyerDto lawyer)
         {
+            var userId = User.GetUserId();
+            if(userId == null || userId != lawyer.LawyerId)
+                return Forbid();
+        
             var updatedLawyer = await lawyerService.UpdateLawyerInfoAsync(lawyer);
 
             return updatedLawyer == null ? BadRequest() : Ok(updatedLawyer);
@@ -49,12 +54,16 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="lawyerId">Идентификатор юриста</param>
         /// <returns>Список договоров</returns>
-        //[Authorize]
+        [Authorize]
         [HttpGet("{lawyerId}/contracts")]
         [ProducesResponseType<List<ContractDto>>(200)]
 		[ProducesResponseType(404)]
 		public async Task<IActionResult> GetLawyerContracts([FromRoute] int lawyerId)
         {
+            var userId = User.GetUserId();
+            if(userId == null || userId != lawyerId)
+                return Forbid();
+            
             var lawyerContracts = await contractService.GetLawyerContractsInfoAsync(lawyerId);
 
             return lawyerContracts == null ? NotFound() : Ok(lawyerContracts);
@@ -65,12 +74,16 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="lawyerId">Идентификатор юриста</param>
         /// <returns>Список отчётов</returns>
-        //[Authorize]
+        [Authorize]
         [HttpGet("{lawyerId}/reports")]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(404)]
 		public async Task<IActionResult> GetLawyerReportsAsync([FromRoute] int lawyerId)
 		{
+            var userId = User.GetUserId();
+            if(userId == null || userId != lawyerId)
+                return Forbid();
+		
 			var reports = await reportService.GetLawyerReportsAsync(lawyerId);
 
 			return reports == null ? NotFound() : Ok(reports);
@@ -81,10 +94,14 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="lawyerId">Идентификатор юриста</param>
         /// <returns>Список уведомлений</returns>
-        //[Authorize]
+        [Authorize]
         [HttpGet("{lawyerId}/notifications")]
         public async Task<IActionResult> GetLawyerNotificationsAsync([FromRoute] int lawyerId)
         {
+            var userId = User.GetUserId();
+            if(userId == null || userId != lawyerId)
+                return Forbid();
+        
             var notifications = await notificationService.GetLawyerNotificationsAsync(lawyerId);
 
             return notifications == null ? BadRequest() : Ok(notifications);

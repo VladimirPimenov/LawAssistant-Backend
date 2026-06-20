@@ -11,14 +11,19 @@ namespace LawAssistant.Application.Contracts
         /// Выполняет регистрацию пользователя
         /// </summary>
         /// <param name="registerRequest">Модель с данными регистрации</param>
-        /// <returns>Модель с данными зарегистрированного пользователя</returns>
-        public Task<RegisterResponce> RegisterAsync(RegisterRequest registerRequest);
+        /// <returns>Модель с данными пользователя</returns>
+        public Task<LawyerDto> RegisterAsync(RegisterRequest registerRequest);
 
         /// <summary>
         /// Выполняет аутентификацию пользователя по логину и паролю
         /// </summary>
         /// <param name="loginRequest">Модель с данными для входа</param>
-        /// <returns>Токен аутентификации</returns>
-        public Task<string> LoginAsync(LoginRequest loginRequest);
+        /// <returns>Модель с данными пользователя</returns>
+        public Task<LawyerDto> LoginAsync(LoginRequest loginRequest);
+        
+        /// <summary>
+        /// Выход из системы
+        /// </summary>
+        public void Logout();
     }
 }

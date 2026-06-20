@@ -2,16 +2,18 @@
 using LawAssistant.Application.Models;
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace LawAssistant.Application.Services
 {
     public class AuthentificationService(
         IHashService hashService,
         ITokenProvider tokenProvider,
-        ILawyerService lawyerService) 
+        ILawyerService lawyerService,
+        IHttpContextAccessor httpContextAccessor) 
         : IAuthentificationService
     {
-        public async Task<RegisterResponce> RegisterAsync(RegisterRequest registerRequest)
+        public async Task<LawyerDto> RegisterAsync(RegisterRequest registerRequest)
         {
             string hashedPassword = hashService.Hash(registerRequest.Password);
 
@@ -27,16 +29,16 @@ namespace LawAssistant.Application.Services
             if (registeredUser == null)
                 return null;
 
-            return new RegisterResponce
+            return new LawyerDto
             {
-                Id = registeredUser.LawyerId,
+                LawyerId = registeredUser.LawyerId,
                 FirstName = registeredUser.FirstName,
                 LastName = registeredUser.LastName,
                 Email = registeredUser.Email
             };
         }
 
-        public async Task<string> LoginAsync(LoginRequest loginRequest)
+        public async Task<LawyerDto> LoginAsync(LoginRequest loginRequest)
         {
             var user = await lawyerService.GetLawyerByEmailAsync(loginRequest.Email);
 
@@ -47,9 +49,23 @@ namespace LawAssistant.Application.Services
                 return null;
 
             var token = tokenProvider.GenerateToken(user);
+            
+            var httpContext = httpContextAccessor.HttpContext;
+            httpContext?.Response.Cookies.Append("token", token);
 
-            return token;
+            return new LawyerDto
+            {
+                LawyerId = user.LawyerId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            };
         }
 
+        public void Logout()
+        {
+            var httpContext = httpContextAccessor.HttpContext;
+            httpContext?.Response.Cookies.Delete("token");
+        }
     }
 }

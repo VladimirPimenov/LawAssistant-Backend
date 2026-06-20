@@ -19,7 +19,7 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="reportId">Идентификатор отчёта</param>
 		/// <returns>Найденный отчёт</returns>
-		//[Authorize]
+		[Authorize]
 		[HttpGet]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(404)]
@@ -35,7 +35,7 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="contractId">Идентификатор договора</param>
 		/// <returns>Созданный отчёт</returns>
-		//[Authorize]
+		[Authorize]
 		[HttpPost]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(400)]
@@ -51,7 +51,7 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="reportId">Идентификатор отчёта</param>
 		/// <returns>Идентификатор удалённого отчёта</returns>
-		//[Authorize]
+		[Authorize]
 		[HttpDelete]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(400)]

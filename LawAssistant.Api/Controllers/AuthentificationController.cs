@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using LawAssistant.Application.Contracts;
 using LawAssistant.Application.Models;
@@ -32,33 +33,26 @@ namespace LawAssistant.Api.Controllers
         /// Выполняет аутентификацию пользователя по логину и паролю
         /// </summary>
         /// <param name="loginRequest">Запрос на вход (логин и пароль)</param>
-        /// <returns>Токен аутентификации</returns>
+        /// <returns>Данные аутентифицированного пользователя</returns>
         [HttpPost("login")]
 		[ProducesResponseType<string>(200)]
 		[ProducesResponseType(401)]
 		public async Task<IActionResult> LoginAsync(LoginRequest loginRequest)
         {
-            var token = await authService.LoginAsync(loginRequest);
+            var user = await authService.LoginAsync(loginRequest);
 
-            if(token == null)
-                return Unauthorized();
-
-			HttpContext httpContext = ControllerContext.HttpContext;
-            httpContext.Response.Cookies.Append("token", token);
-
-            return Ok(token);
+            return user == null ? Unauthorized() : Ok(user);
         }
 
         /// <summary>
         /// Выполняет выход из учётной записи
         /// </summary>
         [HttpPost("logout")]
+        [Authorize]
 		[ProducesResponseType(200)]
 		public async Task<IActionResult> Logout()
         {
-			HttpContext httpContext = ControllerContext.HttpContext;
-            httpContext.Response.Cookies.Delete("token");
-
+            authService.Logout();
             return Ok();
         }
     }

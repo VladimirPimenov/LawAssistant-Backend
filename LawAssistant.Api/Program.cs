@@ -10,16 +10,20 @@ using LawAssistant.Api.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+
+if(builder.Environment.IsDevelopment())
 {
-	options.SwaggerDoc("v1", new OpenApiInfo
+	builder.Services.AddEndpointsApiExplorer();
+	builder.Services.AddSwaggerGen(options =>
 	{
-		Title = "Web API LawAssistant",
-		Description = "REST API сервиса анализа коллективных договоров LawAssistant",
-		Version = "v1",
+		options.SwaggerDoc("v1", new OpenApiInfo
+		{
+			Title = "Web API LawAssistant",
+			Description = "REST API сервиса анализа коллективных договоров LawAssistant",
+			Version = "v1",
+		});
 	});
-});
+}
 
 builder.Services.AddCors(options =>
 {
@@ -32,11 +36,13 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddJwtAuthentification(builder.Configuration);
 
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
-builder.Services.AddJwtAuthentification(builder.Configuration);
 
 var app = builder.Build();
 

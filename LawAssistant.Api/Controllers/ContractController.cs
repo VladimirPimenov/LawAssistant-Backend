@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using LawAssistant.Application.Models;
 using LawAssistant.Application.Contracts;
@@ -21,7 +22,7 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="contractId">Идентификатор договора</param>
         /// <returns>Найденный договор</returns>
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         [ProducesResponseType<CollectiveContract>(200)]
         [ProducesResponseType(404)]
@@ -37,7 +38,7 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="contactId">Идентификатор договора</param>
         /// <returns>Файл договора</returns>
-        //[Authorize]
+        [Authorize]
         [HttpGet("{contractId}/file")]
         public async Task<IActionResult> GetContractFileAsync([FromRoute] int contractId)
         {
@@ -59,7 +60,7 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="contractRequest">Запрос на создание договора</param>
         /// <returns>Созданный договор</returns>
-        //[Authorize]
+        [Authorize]
         [HttpPost]
 		[ProducesResponseType<CollectiveContract>(200)]
 		[ProducesResponseType(400)]
@@ -75,7 +76,7 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="contractDto">Договор с обновлёнными полями</param>
 		/// <returns>Изменённый договор</returns>
-		//[Authorize]
+		[Authorize]
         [HttpPut]
 		[ProducesResponseType<CollectiveContract>(200)]
 		[ProducesResponseType(400)]
@@ -91,7 +92,7 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="contractId">Идентификатор договора</param>
 		/// <returns>Идентификатор удалённого договора</returns>
-		//[Authorize]
+		[Authorize]
         [HttpDelete]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
@@ -107,7 +108,7 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="contractId">Идентификатор договора</param>
         /// <returns>Список отчётов</returns>
-        //[Authorize]
+        [Authorize]
         [HttpGet("{contractId}/reports")]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(404)]
