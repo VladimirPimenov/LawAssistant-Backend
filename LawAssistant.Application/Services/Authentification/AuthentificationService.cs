@@ -50,8 +50,16 @@ namespace LawAssistant.Application.Services
 
             var token = tokenProvider.GenerateToken(user);
             
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddHours(1)
+            };
+            
             var httpContext = httpContextAccessor.HttpContext;
-            httpContext?.Response.Cookies.Append("token", token);
+            httpContext?.Response.Cookies.Append("token", token, cookieOptions);
 
             return new LawyerDto
             {
