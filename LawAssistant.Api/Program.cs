@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 using Microsoft.OpenApi;
 
 using LawAssistant.Infrastructure;
@@ -43,7 +41,6 @@ builder.Services.AddJwtAuthentification(builder.Configuration);
 
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
-
 
 var app = builder.Build();
 

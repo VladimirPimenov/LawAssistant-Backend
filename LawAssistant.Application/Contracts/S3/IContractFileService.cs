@@ -20,5 +20,12 @@ namespace LawAssistant.Application.Contracts
 		/// <param name="contractId">Идентификатор договора</param>
 		/// <returns>Файл договора</returns>
 		public Task<IFormFile> LoadContractFileAsync(int contractId);
+		
+		/// <summary>
+		/// Удаляет файл договора из S3 хранилища
+		/// </summary>
+		/// <param name="contractId">Идентификатор договора</param>
+		/// <returns></returns>
+		public Task DeleteContractFileAsync(int contractId);
 	}
 }

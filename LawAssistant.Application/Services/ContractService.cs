@@ -126,6 +126,8 @@ namespace LawAssistant.Application.Services
 
             var authors = await contractRepository.GetContractAuthorsAsync(contract);
             await RemoveAuthorsFromContractAsync(authors, contract);
+            
+            await fileService.DeleteContractFileAsync(contract.ContractId);
 
             int? removedContractId = await contractRepository.RemoveContractAsync(contract);
             return removedContractId;

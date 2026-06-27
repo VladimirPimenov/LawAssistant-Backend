@@ -8,6 +8,14 @@
         /// <summary>
         /// Адрес S3 хранилища
         /// </summary>
-        public string Endpoint { get; set; }
+        public string Url { get; set; }
+        
+        public string Login { get; set; }
+        
+        public string Password { get; set; }
+        
+        public string DocumentsBucketName { get; set; }
+        
+        public bool UseSsl { get; set; }
     }
 }

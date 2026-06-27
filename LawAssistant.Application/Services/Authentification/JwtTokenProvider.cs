@@ -36,7 +36,7 @@ namespace LawAssistant.Application.Services
             var token = new JwtSecurityToken(
                 claims: claims,
                 signingCredentials: credentials,
-                expires: DateTime.Now.AddMinutes(jwtConfiguration.ExpirationTimeInMinutes));
+                expires: DateTime.UtcNow.AddMinutes(jwtConfiguration.ExpirationTimeInMinutes));
 
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 

@@ -20,5 +20,12 @@ namespace LawAssistant.Application.Contracts
         /// <param name="file">HTTP-форма файла</param>
         /// <param name="key">Ключ сохраняемого файла</param>
         public Task PutObjectAsync(IFormFile file, string key);
+        
+        /// <summary>
+        /// Удаляет файл из хранилища
+        /// </summary>
+        /// <param name="key">Ключ удалямого файла</param>
+        /// <returns></returns>
+        public Task DeleteObjectAsync(string key);
     }
 }

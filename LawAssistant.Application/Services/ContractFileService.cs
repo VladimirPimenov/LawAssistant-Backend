@@ -10,16 +10,13 @@ namespace LawAssistant.Application.Services
 		IContractRepository contractRepository)
 		: IContractFileService
 	{
-		public async Task<IFormFile> LoadContractFileAsync(int contractId)
+        public async Task<IFormFile> LoadContractFileAsync(int contractId)
 		{
 			var contract = await contractRepository.GetContractAsync(contractId);
 			if (contract == null)
 				return null;
 
 			var fileKey = contract.FileKey;
-			if (fileKey == null)
-				return null;
-
 			var file = await s3Adapter.GetObjectAsync(fileKey.ToString());
 			if(file == null)
 				return null;
@@ -35,5 +32,13 @@ namespace LawAssistant.Application.Services
 
 			return fileKey;
 		}
+		
+		public async Task DeleteContractFileAsync(int contractId)
+        {
+			var contract = await contractRepository.GetContractAsync(contractId);
+
+			var fileKey = contract.FileKey;
+            await s3Adapter.DeleteObjectAsync(fileKey.ToString());
+        }
 	}
 }
