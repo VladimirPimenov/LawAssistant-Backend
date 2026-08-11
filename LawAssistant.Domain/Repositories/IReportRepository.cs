@@ -10,6 +10,8 @@ namespace LawAssistant.Domain.Repositories
 		public Task<ComparisonReport> GetReportAsync(int reportId);
 
 		public Task<ComparisonReport> CreateReportAsync(ComparisonReport report);
+		
+		public Task<ComparisonReport> UpdateReportAsync(ComparisonReport updatedReport);
 
 		public Task<int> RemoveReportAsync(ComparisonReport report);
 

@@ -1,4 +1,6 @@
-﻿namespace LawAssistant.Domain.Entities
+﻿using LawAssistant.Domain.Enums;
+
+namespace LawAssistant.Domain.Entities
 {
     /// <summary>
     /// Отчёт о сопоставлении коллективного договора с законодательными актами
@@ -9,6 +11,11 @@
         /// Идентификатор отчёта
         /// </summary>
         public int ReportId { get; set; }
+
+        /// <summary>
+        /// Статус проверки коллективного договора
+        /// </summary>
+        public ReportStatus Status { get; set; }
 
         /// <summary>
         /// Дата создания отчёта

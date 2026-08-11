@@ -22,6 +22,14 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 
             return report;
         }
+        
+        public async Task<ComparisonReport> UpdateReportAsync(ComparisonReport updatedReport)
+        {
+            dbContext.ComparisonReport.Update(updatedReport);
+            await dbContext.SaveChangesAsync();
+            
+            return updatedReport;
+        }
 
         public async Task<int> RemoveReportAsync(ComparisonReport report)
         {
@@ -124,5 +132,5 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
                 .Where(r => reportsId.Contains(r.ReportId))
                 .ToListAsync();
 		}
-	}
+    }
 }

@@ -1,6 +1,8 @@
 ﻿using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
 
+using LawAssistant.Application.Extensions;
+
 namespace LawAssistant.Application.Models
 {
 	internal static class ReportConverter
@@ -10,6 +12,7 @@ namespace LawAssistant.Application.Models
             return new ReportDto
             {
                 ReportId = report.ReportId,
+                Status = report.Status.GetDescription(),
                 ReportedDate = report.ReportedDate,
                 Contract = contract
             };

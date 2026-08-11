@@ -1,6 +1,8 @@
 ﻿using LawAssistant.Application.Contracts;
 using LawAssistant.Application.Models;
+
 using LawAssistant.Domain.Entities;
+using LawAssistant.Domain.Enums;
 using LawAssistant.Domain.Repositories;
 
 namespace LawAssistant.Application.Services
@@ -64,6 +66,7 @@ namespace LawAssistant.Application.Services
 
 			var report = new ComparisonReport
 			{
+				Status = ReportStatus.InProgress,
 				ReportedDate = DateTime.Now.ToUniversalTime(),
 				ContractId = contractId
 			};
@@ -71,6 +74,9 @@ namespace LawAssistant.Application.Services
 			var createdReport = await reportRepository.CreateReportAsync(report);
 			if (createdReport == null)
 				return null;
+				
+			createdReport.Status = ReportStatus.SyntaxProcessing;
+			await reportRepository.UpdateReportAsync(createdReport);
 
 			await SetContractAuthorsToReport(contract, createdReport);
 
@@ -79,8 +85,14 @@ namespace LawAssistant.Application.Services
 			{
 				await reportRepository.AddResultToReportAsync(result, createdReport);
 			}
-
+			
+			createdReport.Status = ReportStatus.SyntaxChecked;
+			await reportRepository.UpdateReportAsync(createdReport);
+			
 			await comparisonService.MakeSemanticComparisonAsync(syntacticComparisonResults);
+
+			createdReport.Status = ReportStatus.SemanticChecked;
+			await reportRepository.UpdateReportAsync(createdReport);
 
 			await CreateAuthorsNotificationAsync(createdReport);
 			

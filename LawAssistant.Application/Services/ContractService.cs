@@ -1,6 +1,6 @@
 ﻿using LawAssistant.Application.Contracts;
-
 using LawAssistant.Application.Models;
+
 using LawAssistant.Domain.Entities;
 using LawAssistant.Domain.Repositories;
 
