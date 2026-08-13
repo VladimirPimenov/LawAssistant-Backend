@@ -14,6 +14,11 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
             return await dbContext.ComparisonResult.FirstOrDefaultAsync(cr => cr.ResultId == resultId);
         }
 
+		public Task<ComparisonResult> CreateComparisonResultAsync(ComparisonResult result)
+        {
+            throw new NotImplementedException();
+        }
+
 		public async Task<ComparisonResult> UpdateComparisonResultAsync(ComparisonResult updatedResult)
 		{
 			dbContext.ComparisonResult.Update(updatedResult);
@@ -29,10 +34,5 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 
 			return result.ResultId;
 		}
-
-		public async Task<int> CompareParagraphWithArticle(ContractParagraph paragraph, ActArticle article)
-        {
-            return await dbContext.CompareParagraphWithArticle(paragraph.ParagraphId, article.ArticleId);
-        }
-	}
+    }
 }

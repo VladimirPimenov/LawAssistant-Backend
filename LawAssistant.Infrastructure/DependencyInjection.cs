@@ -33,8 +33,10 @@ namespace LawAssistant.Infrastructure
             services.AddScoped<IComparisonRepository, ComparisonRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             
-            services.AddScoped<IS3Adapter, S3Adapter>();
             services.AddScoped<ISemanticModuleApiClient, SemanticModuleClient>();
+            services.AddScoped<ISyntaxModuleApiClient, SyntaxModuleClient>();
+            
+            services.AddScoped<IS3Adapter, S3Adapter>();
         }
     }
     

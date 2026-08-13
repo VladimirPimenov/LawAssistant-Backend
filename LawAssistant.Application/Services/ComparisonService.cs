@@ -7,7 +7,8 @@ namespace LawAssistant.Application.Services
     internal class ComparisonService(
         IComparisonRepository comparisonRepository,
         ILawDocumentsRepository lawDocsRepository,
-        ISemanticModuleApiClient semanticModule) 
+        ISemanticModuleApiClient semanticModule,
+        ISyntaxModuleApiClient syntaxModule) 
         : IComparisonService
     {
         private readonly int bestResultsCount = 5;
@@ -54,7 +55,7 @@ namespace LawAssistant.Application.Services
         {
             foreach (var result in syntacticComparisonResults)
             {
-                var semanticResult = await semanticModule.CompareWithEmbeddingAsync(result);
+                var semanticResult = await semanticModule.MakeSemanticComparisonAsync(result);
 
                 if (semanticResult == null)
                     continue;
@@ -71,7 +72,7 @@ namespace LawAssistant.Application.Services
 
             foreach (var acrticle in act.Articles)
             {
-                int comparisonResultId = await comparisonRepository.CompareParagraphWithArticle(paragraph, acrticle);
+                int comparisonResultId = await syntaxModule.MakeSyntaxComparisonAsync(paragraph, acrticle);
                 var result = await comparisonRepository.GetComparisonResultAsync(comparisonResultId);
 
                 comparisonResults.Add(result);

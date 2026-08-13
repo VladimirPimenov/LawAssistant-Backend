@@ -12,6 +12,6 @@ namespace LawAssistant.Application.Contracts
 		/// </summary>
 		/// <param name="comparisonResult">Результаты синтаксического сопоставления</param>
 		/// <returns>Результаты семантического сопоставлния</returns>
-		public Task<ComparisonResult> CompareWithEmbeddingAsync(ComparisonResult comparisonResult);
+		public Task<ComparisonResult> MakeSemanticComparisonAsync(ComparisonResult comparisonResult);
 	}
 }
