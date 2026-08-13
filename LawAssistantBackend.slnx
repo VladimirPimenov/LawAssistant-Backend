@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="LawAssistant.Api/LawAssistant.Api.csproj" />
+  <Project Path="LawAssistant.Application/LawAssistant.Application.csproj" />
+  <Project Path="LawAssistant.Domain/LawAssistant.Domain.csproj" />
+  <Project Path="LawAssistant.Infrastructure/LawAssistant.Infrastructure.csproj" />
+</Solution>
