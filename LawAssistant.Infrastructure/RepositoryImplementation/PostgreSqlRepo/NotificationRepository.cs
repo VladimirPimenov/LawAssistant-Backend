@@ -13,10 +13,10 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
             return await dbContext.Notification.FindAsync(notificationId);
         }
 
-        public async Task<List<Notification>> GetLawyerNotificationsAsync(int lawyerId)
+        public async Task<List<Notification>> GetAccountNotificationsAsync(int accountId)
         {
             var notifications = await dbContext.Notification
-                .Where(n => n.LawyerId == lawyerId)
+                .Where(n => n.AccountId == accountId)
                 .ToListAsync();
 
             return notifications;

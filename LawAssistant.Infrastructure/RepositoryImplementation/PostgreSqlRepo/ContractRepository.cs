@@ -81,15 +81,15 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 			await dbContext.SaveChangesAsync();
 		}
 
-		public async Task<List<Lawyer>> GetContractAuthorsAsync(CollectiveContract contract)
+		public async Task<List<Account>> GetContractAuthorsAsync(CollectiveContract contract)
 		{
-			var lawyerIds = await dbContext.LawyerContract
+			var authorsId = await dbContext.LawyerContract
 				.Where(lc => lc.ContractId == contract.ContractId)
 				.Select(lc => lc.LawyerId)
 				.ToListAsync();
 
-			return await dbContext.Lawyer
-				.Where(l => lawyerIds.Contains(l.LawyerId))
+			return await dbContext.Account
+				.Where(a => authorsId.Contains(a.AccountId))
 				.ToListAsync();
 		}
 	}

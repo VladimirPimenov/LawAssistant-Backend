@@ -20,11 +20,11 @@ namespace LawAssistant.Application.Services
             jwtConfiguration = config.GetSection(nameof(JwtConfiguration)).Get<JwtConfiguration>();
         }
 
-        public string GenerateToken(Lawyer lawyer)
+        public string GenerateToken(Account account)
         {
             var claims = new List<Claim>
             {
-                new Claim("userId", lawyer.LawyerId.ToString())
+                new Claim("userId", account.AccountId.ToString())
             };
 
             var key = jwtConfiguration.SecretKey;

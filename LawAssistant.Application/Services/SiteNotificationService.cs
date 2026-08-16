@@ -6,27 +6,27 @@ namespace LawAssistant.Application.Services
 {
 	internal class SiteNotificationService(
         INotificationRepository notificationRepository,
-        ILawyerService lawyerService)
+        IAccountService accountService)
         : INotificationService
     {
-        public async Task<List<Notification>> GetLawyerNotificationsAsync(int lawyerId)
+        public async Task<List<Notification>> GetAccountNotificationsAsync(int accountId)
         {
-            var notifications = await notificationRepository.GetLawyerNotificationsAsync(lawyerId);
+            var notifications = await notificationRepository.GetAccountNotificationsAsync(accountId);
             return notifications
                 .OrderByDescending(n => n.Date)
                 .ToList();
 		}
             
 
-        public async Task<Notification> CreateNotificationAsync(string notificationText, int lawyerId)
+        public async Task<Notification> CreateNotificationAsync(string notificationText, int accountId)
         {
-            var lawyer = await lawyerService.GetLawyerAsync(lawyerId);
+            var lawyer = await accountService.GetAccountAsync(accountId);
             if (lawyer == null)
                 return null;
 
             var notification = new Notification
             {
-                LawyerId = lawyerId,
+                AccountId = accountId,
                 Text = notificationText,
                 Date = DateTime.Now.ToUniversalTime(),
                 IsReaded = false

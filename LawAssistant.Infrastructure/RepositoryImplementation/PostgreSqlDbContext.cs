@@ -8,7 +8,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 {
 	internal class PostgreSqlDbContext: DbContext
 	{
-		public DbSet<Lawyer> Lawyer { get; set; }
+		public DbSet<Account> Account { get; set; }
 
 		public DbSet<LawAct> LawAct { get; set; }
 		public DbSet<ActArticle> ActArticle { get; set; }
@@ -28,7 +28,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Lawyer>().HasKey(l => l.LawyerId);
+			modelBuilder.Entity<Account>().HasKey(ac => ac.AccountId);
 			modelBuilder.Entity<LawAct>().HasKey(la => la.ActId);
 			modelBuilder.Entity<ActArticle>().HasKey(a => a.ArticleId);
 			modelBuilder.Entity<CollectiveContract>().HasKey(c => c.ContractId);
@@ -49,7 +49,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 				.WithOne()
 				.HasForeignKey(a => a.ActId);
 
-			modelBuilder.Entity<Lawyer>()
+			modelBuilder.Entity<Account>()
 				.Property(l => l.HashedPassword)
 				.HasColumnName("Password");
 

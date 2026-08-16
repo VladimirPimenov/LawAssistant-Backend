@@ -1,58 +1,51 @@
-﻿using LawAssistant.Application.Contracts;
-using LawAssistant.Domain.Repositories;
-
+using LawAssistant.Application.Contracts;
 using LawAssistant.Application.Models;
-using LawAssistant.Domain.Entities;
+using LawAssistant.Domain.Repositories;
 
 namespace LawAssistant.Application.Services
 {
-	internal class LawyerService(
-        ILawyerRepository lawyerRepository)
+    /// <summary>
+    /// Сервис для работы с данными юристов.
+    /// Инкапсулирует логику работы с аккаунтами юристов
+    /// </summary>
+    internal class LawyerService(
+        IAccountRepository accountRepository,
+        IContractService contractService,
+        IReportService reportService) 
         : ILawyerService
     {
-		public async Task<List<LawyerDto>> GetLawyersListAsync()
-		{
-			var lawyers = await lawyerRepository.GetAllLawyersAsync();
+        /// <summary>
+        /// Получить список юристов
+        /// </summary>
+        /// <returns>Список юристов</returns>
+        public async Task<List<AccountDto>> GetLawyersListAsync()
+        {
+            var lawyers = await accountRepository.GetAllAccountsAsync();
 
 			var dtos = lawyers
 				.Select(l => l.ConvertToDto())
 				.ToList();
 			return dtos;
-		}
-
-		public async Task<Lawyer> GetLawyerAsync(int lawyerId)
-		{
-			return await lawyerRepository.GetLawyerAsync(lawyerId);
-		}
-
-		public async Task<Lawyer> GetLawyerByEmailAsync(string email)
-		{
-			return await lawyerRepository.GetLawyerByEmailAsync(email);
-		}
-
-		public async Task<LawyerDto> UpdateLawyerInfoAsync(LawyerDto lawyerDto)
+        }
+    
+        /// <summary>
+        /// Получает список договоров юриста
+        /// </summary>
+        /// <param name="lawyerId">Идентификатор юриста</param>
+        /// <returns>Список договоров</returns>
+        public async Task<List<ContractDto>> GetLawyerContractsAsync(int lawyerId)
         {
-            var lawyer = await lawyerRepository.GetLawyerAsync(lawyerDto.LawyerId);
-
-            if (lawyer == null)
-                return null;
-
-            lawyer.FirstName = lawyerDto.FirstName;
-            lawyer.LastName = lawyerDto.LastName;
-
-            var updatedLawyer = await lawyerRepository.UpdateLawyerAsync(lawyer);
-
-            return lawyerDto;
+            return await contractService.GetLawyerContractsInfoAsync(lawyerId);
         }
 
-		public async Task<Lawyer> CreateLawyerAsync(Lawyer lawyer)
-		{
-            return await lawyerRepository.CreateLawyerAsync(lawyer);
-		}
-
-        public Task<LawyerDto> ChangePasswordAsync(Lawyer lawyer)
+        /// <summary>
+        /// Получить список отчётов юриста
+        /// </summary>
+        /// <param name="lawyerId">Идентификатор юриста</param>
+        /// <returns>Список отчётов</returns>
+        public async Task<List<ReportDto>> GetLawyerReportsAsync(int lawyerId)
         {
-            throw new NotImplementedException();
+            return await reportService.GetLawyerReportsAsync(lawyerId);
         }
-	}
+    }
 }

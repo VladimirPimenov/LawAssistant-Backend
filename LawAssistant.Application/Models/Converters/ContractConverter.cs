@@ -4,7 +4,7 @@ namespace LawAssistant.Application.Models
 {
 	internal static class ContractConverter
     {
-        public static ContractDto ConvertToDto(this CollectiveContract contract, List<LawyerDto> authors)
+        public static ContractDto ConvertToDto(this CollectiveContract contract, List<AccountDto> authors)
         {
             return new ContractDto
             {

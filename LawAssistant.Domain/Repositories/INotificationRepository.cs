@@ -9,7 +9,7 @@ namespace LawAssistant.Domain.Repositories
     {
         public Task<Notification> GetNotificationAsync(int notificationId);
 
-        public Task<List<Notification>> GetLawyerNotificationsAsync(int lawyerId);
+        public Task<List<Notification>> GetAccountNotificationsAsync(int accountId);
 
         public Task<Notification> CreateNotificationAsync(Notification notification);
 

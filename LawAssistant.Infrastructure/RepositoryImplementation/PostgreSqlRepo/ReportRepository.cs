@@ -79,38 +79,38 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 			}
 		}
 
-		public async Task AddReportToLawyerAsync(ComparisonReport report, Lawyer lawyer)
+		public async Task AddReportToLawyerAsync(ComparisonReport report, Account lawyer)
 		{
             var lawyerReport = new LawyerReport
             {
                 ReportId = report.ReportId,
-                LawyerId = lawyer.LawyerId
+                LawyerId = lawyer.AccountId
             };
 
             dbContext.LawyerReport.Add(lawyerReport);
             await dbContext.SaveChangesAsync();
 		}
 
-		public async Task RemoveReportFromLawyerAsync(ComparisonReport report, Lawyer lawyer)
+		public async Task RemoveReportFromLawyerAsync(ComparisonReport report, Account lawyer)
 		{
             var lawyerReport = await dbContext.LawyerReport
                                 .FirstOrDefaultAsync(lr =>
-                                lr.LawyerId == lawyer.LawyerId
+                                lr.LawyerId == lawyer.AccountId
                                 && lr.ReportId == report.ReportId);
 
 			dbContext.LawyerReport.Remove(lawyerReport);
 			await dbContext.SaveChangesAsync();
 		}
 
-		public async Task<List<Lawyer>> GetReportLawyersAsync(ComparisonReport report)
+		public async Task<List<Account>> GetReportLawyersAsync(ComparisonReport report)
 		{
 			var lawyersId = await dbContext.LawyerReport
                 .Where(lr => lr.ReportId == report.ReportId)
                 .Select(lr => lr.LawyerId)
                 .ToListAsync();
 
-            return await dbContext.Lawyer
-                .Where(l => lawyersId.Contains(l.LawyerId))
+            return await dbContext.Account
+                .Where(l => lawyersId.Contains(l.AccountId))
                 .ToListAsync();
 		}
 

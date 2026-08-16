@@ -13,7 +13,7 @@
 		/// <summary>
 		/// Идентификатор пользователя, которому предназначено уведомление
 		/// </summary>
-		public int LawyerId { get; set; }
+		public int AccountId { get; set; }
 
 		/// <summary>
 		/// Текст уведомления

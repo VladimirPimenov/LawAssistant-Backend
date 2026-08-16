@@ -12,6 +12,6 @@
 
         public Guid? FileKey { get; init;  }
 
-        public List<LawyerDto> Authors { get; init; }
+        public List<AccountDto> Authors { get; init; }
     }
 }

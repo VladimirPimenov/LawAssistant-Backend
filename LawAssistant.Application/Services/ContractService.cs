@@ -8,7 +8,7 @@ namespace LawAssistant.Application.Services
 {
 	internal class ContractService(
         IContractRepository contractRepository,
-        ILawyerService lawyerService,
+        IAccountService accountService,
         IContractFileService fileService,
         IDocumentParser documentParser,
         INotificationService notificationService)
@@ -133,79 +133,79 @@ namespace LawAssistant.Application.Services
             return removedContractId;
         }
 
-        private async Task<List<Lawyer>> GetContractAuthorsFromRequestAsync(CreateContractRequest contractRequest)
+        private async Task<List<Account>> GetContractAuthorsFromRequestAsync(CreateContractRequest contractRequest)
         {
-            var authors = new List<Lawyer>();
+            var authors = new List<Account>();
 
             foreach(var authorId in contractRequest.AuthorsId)
             {
-                var author = await lawyerService.GetLawyerAsync(authorId);
+                var author = await accountService.GetAccountAsync(authorId);
                 authors.Add(author);
             }
             return authors;
         }
 
-        private async Task AddAuthorsToContractAsync(List<Lawyer> authors, CollectiveContract contract)
+        private async Task AddAuthorsToContractAsync(List<Account> authors, CollectiveContract contract)
         {
             foreach (var author in authors)
             {
-                await contractRepository.AddAuthorToContractAsync(author.LawyerId, contract.ContractId);
+                await contractRepository.AddAuthorToContractAsync(author.AccountId, contract.ContractId);
             }
             await Task.CompletedTask;
         }
 
-		private async Task RemoveAuthorsFromContractAsync(List<Lawyer> authors, CollectiveContract contract)
+		private async Task RemoveAuthorsFromContractAsync(List<Account> authors, CollectiveContract contract)
 		{
 			foreach (var author in authors)
 			{
-				await contractRepository.RemoveAuthorFromContractAsync(author.LawyerId, contract.ContractId);
+				await contractRepository.RemoveAuthorFromContractAsync(author.AccountId, contract.ContractId);
 			}
             await Task.CompletedTask;
 		}
 
-        private async Task<List<Lawyer>> GetAddedAuthorsAsync(ContractDto updatedContract, List<Lawyer> dbAuthors)
+        private async Task<List<Account>> GetAddedAuthorsAsync(ContractDto updatedContract, List<Account> dbAuthors)
         {
-            var dbContractAuthorsId = dbAuthors.Select(a => a.LawyerId).ToList();
+            var dbContractAuthorsId = dbAuthors.Select(a => a.AccountId).ToList();
 
-            var updatedContactAuthorsId = updatedContract.Authors.Select(a => a.LawyerId).ToList();
+            var updatedContactAuthorsId = updatedContract.Authors.Select(a => a.AccountId).ToList();
 
             var addedAuthorsId = updatedContactAuthorsId.Except(dbContractAuthorsId);
 
-            var addedAuthors = new List<Lawyer>();
+            var addedAuthors = new List<Account>();
 
             foreach(var authorId in addedAuthorsId)
             {
-                var author = await lawyerService.GetLawyerAsync(authorId);
+                var author = await accountService.GetAccountAsync(authorId);
                 addedAuthors.Add(author);
             }
             return addedAuthors;
         }
 
-		private async Task<List<Lawyer>> GetRemovedAuthorsAsync(ContractDto updatedContract, List<Lawyer> dbAuthors)
+		private async Task<List<Account>> GetRemovedAuthorsAsync(ContractDto updatedContract, List<Account> dbAuthors)
 		{
-			var dbContractAuthorsId = dbAuthors.Select(a => a.LawyerId).ToList();
+			var dbContractAuthorsId = dbAuthors.Select(a => a.AccountId).ToList();
 
-			var updatedContactAuthorsId = updatedContract.Authors.Select(a => a.LawyerId).ToList();
+			var updatedContactAuthorsId = updatedContract.Authors.Select(a => a.AccountId).ToList();
 
 			var removedAuthorsId = dbContractAuthorsId.Except(updatedContactAuthorsId);
 
-			var removedAuthors = new List<Lawyer>();
+			var removedAuthors = new List<Account>();
 
 			foreach (var authorId in removedAuthorsId)
 			{
-				var author = await lawyerService.GetLawyerAsync(authorId);
+				var author = await accountService.GetAccountAsync(authorId);
 				removedAuthors.Add(author);
 			}
 			return removedAuthors;
 		}
     
-        private async Task CreateAuthorsNotificationAsync(CollectiveContract contract, List<Lawyer> lawyers)
+        private async Task CreateAuthorsNotificationAsync(CollectiveContract contract, List<Account> authors)
         {
             string notificationText = $"Загружен документ «{contract.Title}»";
 
-            foreach(var lawyer in lawyers)
+            foreach(var author in authors)
             {
-                await notificationService.CreateNotificationAsync(notificationText, lawyer.LawyerId);
+                await notificationService.CreateNotificationAsync(notificationText, author.AccountId);
             }
         }
     }

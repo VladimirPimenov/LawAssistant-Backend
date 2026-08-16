@@ -9,15 +9,15 @@ namespace LawAssistant.Application.Services
     public class AuthentificationService(
         IHashService hashService,
         ITokenProvider tokenProvider,
-        ILawyerService lawyerService,
+        IAccountService accountService,
         IHttpContextAccessor httpContextAccessor) 
         : IAuthentificationService
     {
-        public async Task<LawyerDto> RegisterAsync(RegisterRequest registerRequest)
+        public async Task<AccountDto> RegisterAsync(RegisterRequest registerRequest)
         {
             string hashedPassword = hashService.Hash(registerRequest.Password);
 
-            var newUser = new Lawyer
+            var newUser = new Account
             {
                 FirstName = registerRequest.FirstName,
                 LastName = registerRequest.LastName,
@@ -25,22 +25,22 @@ namespace LawAssistant.Application.Services
                 HashedPassword = hashedPassword
             };
 
-            var registeredUser = await lawyerService.CreateLawyerAsync(newUser);
+            var registeredUser = await accountService.CreateAccountAsync(newUser);
             if (registeredUser == null)
                 return null;
 
-            return new LawyerDto
+            return new AccountDto
             {
-                LawyerId = registeredUser.LawyerId,
+                AccountId = registeredUser.AccountId,
                 FirstName = registeredUser.FirstName,
                 LastName = registeredUser.LastName,
                 Email = registeredUser.Email
             };
         }
 
-        public async Task<LawyerDto> LoginAsync(LoginRequest loginRequest)
+        public async Task<AccountDto> LoginAsync(LoginRequest loginRequest)
         {
-            var user = await lawyerService.GetLawyerByEmailAsync(loginRequest.Email);
+            var user = await accountService.GetAccountByEmailAsync(loginRequest.Email);
 
             if (user == null)
                 return null;
@@ -61,9 +61,9 @@ namespace LawAssistant.Application.Services
             var httpContext = httpContextAccessor.HttpContext;
             httpContext?.Response.Cookies.Append("token", token, cookieOptions);
 
-            return new LawyerDto
+            return new AccountDto
             {
-                LawyerId = user.LawyerId,
+                AccountId = user.AccountId,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email

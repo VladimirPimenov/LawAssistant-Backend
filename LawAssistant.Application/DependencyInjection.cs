@@ -19,6 +19,7 @@ namespace LawAssistant.Application
             services.AddScoped<IContractFileService, ContractFileService>();
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ILawyerService, LawyerService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IComparisonService, ComparisonService>();
 
             services.AddScoped<IDocumentParser, WordDocumentParser>();

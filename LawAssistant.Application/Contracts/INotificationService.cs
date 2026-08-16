@@ -9,19 +9,19 @@ namespace LawAssistant.Application.Contracts
     public interface INotificationService
     {
         /// <summary>
-        /// Возвращает уведомления юриста
+        /// Возвращает уведомления пользователя
         /// </summary>
-        /// <param name="lawyerId">Идентификатор юриста</param>
+        /// <param name="accountId">Идентификатор пользователя</param>
         /// <returns>Список уведомлений</returns>
-        public Task<List<Notification>> GetLawyerNotificationsAsync(int lawyerId);
+        public Task<List<Notification>> GetAccountNotificationsAsync(int accountId);
 
         /// <summary>
-        /// Создает уведомление для юриста
+        /// Создает уведомление для пользователя
         /// </summary>
         /// <param name="notificationText">Текст уведомления</param>
-        /// <param name="lawyerId">Юрист, которому предназначено уведомление</param>
+        /// <param name="accountId">Пользователь, которому предназначено уведомление</param>
         /// <returns>Уведомление</returns>
-        public Task<Notification> CreateNotificationAsync(string notificationText, int lawyerId);
+        public Task<Notification> CreateNotificationAsync(string notificationText, int accountId);
 
         /// <summary>
         /// Изменяет уведомление

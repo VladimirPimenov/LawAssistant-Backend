@@ -8,10 +8,10 @@ namespace LawAssistant.Application.Contracts
     public interface ITokenProvider
     {
         /// <summary>
-        /// Генерирует токен
+        /// Генерирует токен для аккаунта
         /// </summary>
-        /// <param name="lawyer">Юрист</param>
+        /// <param name="account">Аккаунт</param>
         /// <returns>Токен</returns>
-        public string GenerateToken(Lawyer lawyer);
+        public string GenerateToken(Account account);
     }
 }

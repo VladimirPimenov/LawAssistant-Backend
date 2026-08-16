@@ -105,8 +105,8 @@ namespace LawAssistant.Application.Services
 			if (report == null)
 				return null;
 
-			var reportLawyers = await reportRepository.GetReportLawyersAsync(report);
-			await RemoveAllLawyersFromReport(reportLawyers, report);
+			var reportAuthors = await reportRepository.GetReportLawyersAsync(report);
+			await RemoveAllAuthorsFromReport(reportAuthors, report);
 
 			var reportResults = await reportRepository.GetReportResultsAsync(report);
 
@@ -126,9 +126,9 @@ namespace LawAssistant.Application.Services
 
 			foreach(var author in contractWithAuthors.Authors)
 			{
-				var lawyer = new Lawyer
+				var lawyer = new Account
 				{
-					LawyerId = author.LawyerId,
+					AccountId = author.AccountId,
 					FirstName = author.FirstName,
 					LastName = author.LastName,
 					Email = author.Email
@@ -138,11 +138,11 @@ namespace LawAssistant.Application.Services
 			}
 		}
 
-		private async Task RemoveAllLawyersFromReport(List<Lawyer> lawyers, ComparisonReport report)
+		private async Task RemoveAllAuthorsFromReport(List<Account> authors, ComparisonReport report)
 		{
-			foreach(var lawyer in lawyers)
+			foreach(var author in authors)
 			{
-				await reportRepository.RemoveReportFromLawyerAsync(report, lawyer);
+				await reportRepository.RemoveReportFromLawyerAsync(report, author);
 			}
 			await Task.CompletedTask;
 		}
@@ -159,9 +159,9 @@ namespace LawAssistant.Application.Services
 
 			string notificationText = $"Создан отчёт по документу «{reportedContract.Title}»";
 
-			foreach (var lawyer in reportedContract.Authors)
+			foreach (var author in reportedContract.Authors)
 			{
-				await notificationService.CreateNotificationAsync(notificationText, lawyer.LawyerId);
+				await notificationService.CreateNotificationAsync(notificationText, author.AccountId);
 			}
 		}
 	}

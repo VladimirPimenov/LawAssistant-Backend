@@ -19,11 +19,11 @@ namespace LawAssistant.Domain.Repositories
 
 		public Task<List<ComparisonResult>> GetReportResultsAsync(ComparisonReport report);
 
-		public Task AddReportToLawyerAsync(ComparisonReport report, Lawyer lawyer);
+		public Task AddReportToLawyerAsync(ComparisonReport report, Account lawyer);
 
-		public Task RemoveReportFromLawyerAsync(ComparisonReport report, Lawyer lawyer);
+		public Task RemoveReportFromLawyerAsync(ComparisonReport report, Account account);
 
-		public Task<List<Lawyer>> GetReportLawyersAsync(ComparisonReport report);
+		public Task<List<Account>> GetReportLawyersAsync(ComparisonReport report);
 
 		public Task<List<ComparisonReport>> GetContractReportsAsync(int contractId);
 

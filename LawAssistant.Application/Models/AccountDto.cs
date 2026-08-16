@@ -1,8 +1,8 @@
 ﻿namespace LawAssistant.Application.Models
 {
-    public record LawyerDto
+    public record AccountDto
     {
-        public int LawyerId { get; init; }
+        public int AccountId { get; init; }
 
         public string FirstName { get; init; }
 

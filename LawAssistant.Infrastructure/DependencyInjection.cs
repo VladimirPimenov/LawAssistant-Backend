@@ -26,7 +26,7 @@ namespace LawAssistant.Infrastructure
 		            .GetSection(nameof(DbConfiguration))
 		            .Get<DbConfiguration>().PostreSqlConnectionString));
 
-			services.AddScoped<ILawyerRepository, LawyerRepository>();
+			services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<ILawDocumentsRepository, LawDocumentsRepository>();
             services.AddScoped<IReportRepository, ReportRepository>();

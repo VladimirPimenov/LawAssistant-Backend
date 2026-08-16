@@ -23,6 +23,6 @@ namespace LawAssistant.Domain.Repositories
 
 		public Task RemoveAuthorFromContractAsync(int lawyerId, int contractId);
 
-		public Task<List<Lawyer>> GetContractAuthorsAsync(CollectiveContract contract);
+		public Task<List<Account>> GetContractAuthorsAsync(CollectiveContract contract);
 	}
 }

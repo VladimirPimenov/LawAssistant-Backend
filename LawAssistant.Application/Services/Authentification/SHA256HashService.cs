@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+
 using LawAssistant.Application.Contracts;
 
 namespace LawAssistant.Application.Services
