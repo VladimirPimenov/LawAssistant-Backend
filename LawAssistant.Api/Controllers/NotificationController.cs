@@ -11,6 +11,7 @@ namespace LawAssistant.Api.Controllers
     /// </summary>
     /// <param name="notificationService"></param>
     [ApiController, Route("notifications")]
+    [Authorize(Roles = "Lawyer, Admin")]
     public class NotificationController(
         INotificationService notificationService)
         : ControllerBase
@@ -20,7 +21,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="notification">Уведомление с обновлёнными полями</param>
         /// <returns>Изменённое уведомление</returns>
-        [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateNotificationAsync(Notification notification)
         {
@@ -34,7 +34,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="notificationId">Идентификатор уведомления</param>
         /// <returns>Идентификатор удалённого уведомления</returns>
-        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> RemoveNotificationAsync(int notificationId)
         {

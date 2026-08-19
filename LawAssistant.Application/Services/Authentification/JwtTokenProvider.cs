@@ -24,7 +24,8 @@ namespace LawAssistant.Application.Services
         {
             var claims = new List<Claim>
             {
-                new Claim("userId", account.AccountId.ToString())
+                new Claim("userId", account.AccountId.ToString()),
+                new Claim(ClaimTypes.Role, account.Role.RoleName)
             };
 
             var key = jwtConfiguration.SecretKey;

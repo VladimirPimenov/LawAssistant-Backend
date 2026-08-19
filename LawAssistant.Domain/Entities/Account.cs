@@ -8,7 +8,7 @@
 		/// <summary>
 		/// Идентификатор аккаунта
 		/// </summary>
-		public int AccountId { get; set;  }
+		public int AccountId { get; set; }
 
 		/// <summary>
 		/// Имя
@@ -19,7 +19,7 @@
 		/// Фамилия
 		/// </summary>
 		public string LastName { get; set; }
-	
+
 		/// <summary>
 		/// Адрес электронной почты
 		/// </summary>
@@ -29,5 +29,15 @@
 		/// Хешированный пароль
 		/// </summary>
 		public string HashedPassword { get; set; }
+
+		/// <summary>
+		/// Идентификатор роли пользователя (навигационное свойство)
+		/// </summary>
+		public int RoleId { get; set; }
+
+		/// <summary>
+		/// Роль пользователя
+		/// </summary>
+		public Role Role { get; set; }
 	}
 }

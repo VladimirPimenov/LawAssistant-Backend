@@ -12,13 +12,13 @@ namespace LawAssistant.Api.Controllers
     /// Контроллер для операций с аккаунтами юристов
     /// </summary>
     [ApiController, Route("lawyers")]
+    [Authorize(Roles = "Lawyer")]
     public class LawyerController(ILawyerService lawyerService) : ControllerBase
     {
         /// <summary>
         /// Возращает список всех юристов
         /// </summary>
         /// <returns>Список юристов</returns>
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetLawyersList()
         {
@@ -32,7 +32,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="lawyerId">Идентификатор юриста</param>
         /// <returns>Список договоров</returns>
-        [Authorize]
         [HttpGet("{lawyerId}/contracts")]
         [ProducesResponseType<List<ContractDto>>(200)]
 		[ProducesResponseType(404)]
@@ -52,7 +51,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="lawyerId">Идентификатор юриста</param>
         /// <returns>Список отчётов</returns>
-        [Authorize]
         [HttpGet("{lawyerId}/reports")]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(404)]

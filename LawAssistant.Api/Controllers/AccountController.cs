@@ -11,6 +11,7 @@ namespace LawAssistant.Api.Controllers
     /// Контроллер для общих операций с аккаунтами
     /// </summary>
     [ApiController, Route("accounts")]
+    [Authorize(Roles = "Lawyer, Admin")]
     public class AccountController(
         IAccountService accountService,
         INotificationService notificationService) 
@@ -21,7 +22,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="account">Обновлённые данные аккаунта</param>
         /// <returns>Изменённая модель аккаунта</returns>
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateAccountAsync(AccountDto account)
         {
@@ -39,7 +39,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="accountId">Идентификатор аккаунта</param>
         /// <returns>Список уведомлений</returns>
-        [Authorize]
         [HttpGet("{accountId}/notifications")]
         public async Task<IActionResult> GetLawyerNotificationsAsync([FromRoute] int accountId)
         {

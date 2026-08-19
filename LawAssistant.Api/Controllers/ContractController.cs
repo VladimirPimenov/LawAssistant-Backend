@@ -11,6 +11,7 @@ namespace LawAssistant.Api.Controllers
     /// Контроллер для работы с коллективными договорами
     /// </summary>
     [ApiController, Route("contracts")]
+    [Authorize(Roles = "Lawyer")]
     public class ContractController(
         IContractService contractService,
         IContractFileService contractFileService,
@@ -22,7 +23,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="contractId">Идентификатор договора</param>
         /// <returns>Найденный договор</returns>
-        [Authorize]
         [HttpGet]
         [ProducesResponseType<CollectiveContract>(200)]
         [ProducesResponseType(404)]
@@ -38,7 +38,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="contactId">Идентификатор договора</param>
         /// <returns>Файл договора</returns>
-        [Authorize]
         [HttpGet("{contractId}/file")]
         public async Task<IActionResult> GetContractFileAsync([FromRoute] int contractId)
         {
@@ -60,7 +59,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="contractRequest">Запрос на создание договора</param>
         /// <returns>Созданный договор</returns>
-        [Authorize]
         [HttpPost]
 		[ProducesResponseType<CollectiveContract>(200)]
 		[ProducesResponseType(400)]
@@ -76,7 +74,6 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="contractDto">Договор с обновлёнными полями</param>
 		/// <returns>Изменённый договор</returns>
-		[Authorize]
         [HttpPut]
 		[ProducesResponseType<CollectiveContract>(200)]
 		[ProducesResponseType(400)]
@@ -92,7 +89,6 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="contractId">Идентификатор договора</param>
 		/// <returns>Идентификатор удалённого договора</returns>
-		[Authorize]
         [HttpDelete]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
@@ -108,7 +104,6 @@ namespace LawAssistant.Api.Controllers
         /// </summary>
         /// <param name="contractId">Идентификатор договора</param>
         /// <returns>Список отчётов</returns>
-        [Authorize]
         [HttpGet("{contractId}/reports")]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(404)]

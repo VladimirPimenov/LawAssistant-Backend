@@ -18,12 +18,16 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation.PostgreSqlRepo
 
 		public async Task<Account> GetAccountByEmailAsync(string email)
 		{
-			return await dbContext.Account.FirstOrDefaultAsync(a => a.Email == email);
+			return await dbContext.Account
+				.Include(a => a.Role)
+				.FirstOrDefaultAsync(a => a.Email == email);
 		}
 
 		public async Task<Account> GetAccountAsync(int accountId)
 		{
-			return await dbContext.Account.FindAsync(accountId);
+			return await dbContext.Account
+				.Include(a => a.Role)
+				.FirstOrDefaultAsync(a => a.AccountId == accountId);
 		}
 
 		public async Task<Account> UpdateAccountAsync(Account account)

@@ -38,6 +38,7 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 			modelBuilder.Entity<ReportResult>().HasKey(rr => rr.ReportResultId);
 			modelBuilder.Entity<LawyerReport>().HasKey(lr => lr.LawyerReportId);
 			modelBuilder.Entity<Notification>().HasKey(n => n.NotificationId);
+			modelBuilder.Entity<Role>().HasKey(r => r.RoleId);
 
 			modelBuilder.Entity<CollectiveContract>()
 				.HasMany(c => c.ContractParagraphs)
@@ -57,6 +58,11 @@ namespace LawAssistant.Infrastructure.RepositoryImplementation
 				.HasOne(r => r.ContractParagraph)
 				.WithMany()
 				.HasForeignKey(r => r.ParagraphId);
+				
+			modelBuilder.Entity<Account>()
+				.HasOne(a => a.Role)
+				.WithMany()
+				.HasForeignKey(a => a.RoleId);
 		}
 	}
 }

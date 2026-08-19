@@ -10,6 +10,7 @@ namespace LawAssistant.Api.Controllers
 	/// Контроллер для работы с отчётами
 	/// </summary>
 	[ApiController, Route("reports")]
+	[Authorize(Roles = "Lawyer")]
 	public class ReportController(
 		IReportService reportService)
 		: ControllerBase
@@ -19,7 +20,6 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="reportId">Идентификатор отчёта</param>
 		/// <returns>Найденный отчёт</returns>
-		[Authorize]
 		[HttpGet]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(404)]
@@ -35,7 +35,6 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="contractId">Идентификатор договора</param>
 		/// <returns>Созданный отчёт</returns>
-		[Authorize]
 		[HttpPost]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(400)]
@@ -51,7 +50,6 @@ namespace LawAssistant.Api.Controllers
 		/// </summary>
 		/// <param name="reportId">Идентификатор отчёта</param>
 		/// <returns>Идентификатор удалённого отчёта</returns>
-		[Authorize]
 		[HttpDelete]
 		[ProducesResponseType<ComparisonReport>(200)]
 		[ProducesResponseType(400)]
