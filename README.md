@@ -13,13 +13,13 @@
 ``` bash
 dotnet run --project LawAssistant.Api
 ```
-### Запуск модуля семантического сопоставления
+### Запуск модуля семантического сопоставления (SemanticComparison)
 ``` bash
-uvicorn main:app
+python .\LawAssistant.SemanticComparison\main.py
 ```
 ## Конфигурация
 ### Конфигурация API
-В `LawAssistant.Api/appsettings.json` требуется добавить настройки подключения к БД, S3-хранилищу и модулю семантического сопоставления, а также параметры JWT-токенов:
+В файл конфигурации `LawAssistant.Api/appsettings.json` требуется добавить настройки подключения к БД, S3-хранилищу и модулю семантического сопоставления, а также параметры JWT-токенов:
 ``` json
 {
   "DbConfiguration": {
@@ -40,4 +40,15 @@ uvicorn main:app
     "SecretKey": "secret_key"
   }
 }
+```
+### Конфигурация модуля семантического сопоставления (SemanticComparison)
+В файл конфигурации `LawAssistant.SemanticComparison/config.toml` требуется добавить настройки сервера и подключения к БД:
+``` toml
+[server]
+host = "..."
+port = ...
+docsEndpoint = "..."
+
+[database]
+connectionString = "..."
 ```
